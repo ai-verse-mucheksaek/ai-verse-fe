@@ -1,0 +1,283 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-high": "#e5e8f2", "background": "#f9f9ff", "tertiary-fixed": "#ebddff", "on-surface": "#181c23", "on-secondary": "#ffffff", "error-container": "#ffdad6", "outline-variant": "#dcc0c0", "surface-container-low": "#f1f3fd", "on-tertiary": "#ffffff", "on-background": "#181c23", "primary-fixed-dim": "#ffb3b6", "on-error": "#ffffff", "outline": "#897172", "on-secondary-container": "#7a3d30", "on-error-container": "#93000a", "surface-variant": "#dfe2ec", "surface": "#f9f9ff", "error": "#ba1a1a", "primary": "#9e3944", "primary-fixed": "#ffdada", "surface-container-lowest": "#ffffff", "on-tertiary-fixed-variant": "#4f3d71", "tertiary-fixed-dim": "#d2bcf9", "on-primary-container": "#fffbff", "on-secondary-fixed-variant": "#703629", "secondary-fixed": "#ffdad3", "on-primary-fixed-variant": "#822431", "on-tertiary-container": "#fffbff", "surface-container": "#ebeef7", "secondary-fixed-dim": "#ffb4a4", "inverse-on-surface": "#eef0fa", "inverse-surface": "#2d3138", "tertiary-container": "#7e6ba2", "inverse-primary": "#ffb3b6", "secondary-container": "#ffac9a", "tertiary": "#655388", "on-surface-variant": "#564242", "secondary": "#8d4c3e", "on-tertiary-fixed": "#221042", "on-primary-fixed": "#40000c", "on-secondary-fixed": "#390c04", "surface-dim": "#d7dae3", "surface-container-highest": "#dfe2ec", "surface-bright": "#f9f9ff", "surface-tint": "#a23b47", "on-primary": "#ffffff", "primary-container": "#be515c" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "gutter-desktop": "2rem", "gutter": "1rem", "space-md": "1rem", "margin": "1rem", "space-xl": "2.5rem", "margin-desktop": "3rem", "gutter-tablet": "1.5rem", "margin-tablet": "2rem", "space-lg": "1.5rem", "space-xs": "0.25rem" }, "fontFamily": { "display-lg-mobile": ["Bodoni Moda"], "headline-lg-mobile": ["Bodoni Moda"], "body-lg": ["Manrope"], "headline-md": ["Bodoni Moda"], "headline-lg": ["Bodoni Moda"], "label-lg": ["Manrope"], "title-lg": ["Manrope"], "display-lg": ["Bodoni Moda"], "body-md": ["Manrope"], "title-md": ["Manrope"], "label-md": ["Manrope"] }, "fontSize": { "display-lg-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "label-lg": ["13px", { "lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600" }], "title-lg": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0.01em", "fontWeight": "400" }], "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "600" }], "label-md": ["11px", { "lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="It's Me Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrC8n33ATjlxtwe-gZHt1wv8X9sOnIv1VV9eq0-2Wo8_UTBRWZX7Ie2lTSs_jz1C-_0uaJtZmzCYzBqWo9rBtZJiDTkUmtYw-msYn7tPg_smkj4rSrPWlxAa4q2zgLF9OX7mFUcLf3VodqPg_Qc59Bp3Q7tIAYUY9dnaMVjYNfSPWzmyR6CltzJFEmDgVz9Qt4BMVDBWxAQrFSGnBsD-w2dIszkpDmRQK7UKcbk7AKx3"><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-title-md text-primary font-bold tracking-tight">예뻐질 사람? It’s Me!</span><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-label-md text-label-md"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>LIVE 현장 부스</span></div><span class="font-label-md text-label-md text-on-surface-variant font-medium">Start</span></div></div><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface pb-24"><div class="flex flex-col w-full">
+<div class="px-gutter pt-space-md pb-space-lg flex flex-col gap-space-lg max-w-md mx-auto w-full">
+<div class="relative overflow-hidden rounded-xl bg-surface-container p-space-md shadow-sm">
+<div class="absolute -right-10 -bottom-10 w-36 h-36 rounded-full bg-secondary-container/40 blur-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col gap-space-xs">
+<div class="inline-flex items-center gap-1.5 self-start px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+<span class="font-label-md text-label-md">STUDIO BOOTH</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-semibold tracking-tight" style="word-break: keep-all;">
+          빛나는 나의 톤을 찾는 순간
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant" style="word-break: keep-all;">
+          AI 실시간 안면 진단과 감각적인 가상 메이크업으로 나만의 시그니처 무드를 완성해 보세요.
+        </p>
+</div>
+</div>
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-1">
+<h2 class="font-title-md text-title-md text-on-surface font-semibold">체험 코스 선택</h2>
+<span class="font-label-md text-label-md text-on-surface-variant">원하는 스타일을 탭하세요</span>
+</div>
+<!-- Course Option 1: Makeup Course (Recommended) -->
+<div class="cursor-pointer relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-md transition-all duration-200" id="course-makeup" onclick="selectCourse('makeup')">
+<div class="flex items-start gap-space-md">
+<div class="w-20 h-24 rounded-lg overflow-hidden shrink-0 relative bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Close up high-fashion editorial portrait of a young Korean woman with glowing glass skin and soft coral gradient lip makeup, studio diffused lighting with soft rose gold highlights, modern Seoul beauty atelier aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ9NRxuq7EL7STobO8x8qsWARpmNWbi7DESGPSHuAr9MOc_kJJx8P2M-6Ccp3z488YSwRs2ClvsqM96QBRJcQdsUXwtbo7wN1lZcKu38Z5W4OMKfAnjAbTHMBlidZf6LFtVaTlABbBuNg-OcnE0FNSeOlP6sF9rvzTdJyN2pqktnn6Xi216m7zjiew5_bo5J7VTGxeB1PTOk7vFlrmyo7slszdlcj_jdY-R12CXmo">
+<div class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-primary text-on-primary font-label-md text-[10px] leading-tight">
+              BEST
+            </div>
+</div>
+<div class="flex-1 min-w-0 flex flex-col justify-between">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center justify-between gap-1">
+<span class="font-title-md text-title-md text-on-surface font-bold truncate">메이크업 코스</span>
+<span class="shrink-0 px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-md text-label-md">약 4~5분</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-0.5" style="word-break: keep-all;">
+                AI 정밀 분석 · 립/치크 가상 메이크업 · 현장 립스틱 매칭
+              </p>
+</div>
+<div class="mt-2.5 flex items-center justify-between">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-primary font-medium">
+<span class="material-symbols-outlined text-[16px]">photo_camera</span>
+                카메라 촬영 포함
+              </span>
+<div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center transition-all" id="radio-makeup">
+<span class="w-2 h-2 rounded-full bg-on-primary"></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Course Option 2: Color Draping Course (No Photo) -->
+<div class="cursor-pointer relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-md shadow-sm transition-all duration-200" id="course-color" onclick="selectCourse('color')">
+<div class="flex items-start gap-space-md">
+<div class="w-20 h-24 rounded-lg overflow-hidden shrink-0 relative bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Chic editorial close-up photograph of luxury fabric draping swatches in spring warm peach, summer lavender, autumn camel, and winter plum arranged neatly on a warm marble vanity table, soft natural sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuyqySghYpAfRpRY-ujCy6qeclV3h_HwJrI_GSIO_AO8-yK5uGlXJbysOs8osk1-fbdzI3D-Nyxy39276CdVNyGJqYIfwgg6bnrbB_nW2oXa6vY6hMueJNkuozAU-MHmFfVgzb6YDPOdJNWNDT9Vhe6qyZ_TZ4CBHY4d3Dx3yyTbfScvYYimrcAN9kEscEjF3pMIxiJQcs1K6jQG5_w6enHEoVLg_ERqaxkuUSgSI">
+<div class="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-surface-variant text-on-surface-variant font-label-md text-[10px] leading-tight">
+              FAST
+            </div>
+</div>
+<div class="flex-1 min-w-0 flex flex-col justify-between">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center justify-between gap-1">
+<span class="font-title-md text-title-md text-on-surface font-bold truncate">컬러 드레이핑 코스</span>
+<span class="shrink-0 px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md">약 3분</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mt-0.5" style="word-break: keep-all;">
+                사진 미촬영 · 4계절 진단천 드레이핑 · 현장 텍스처 발색
+              </p>
+</div>
+<div class="mt-2.5 flex items-center justify-between">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[16px]">no_photography</span>
+                카메라 미사용
+              </span>
+<div class="w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center transition-all" id="radio-color">
+<span class="w-2 h-2 rounded-full bg-transparent"></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mandatory Privacy & Data Treatment Accordion Card -->
+<div class="flex flex-col rounded-xl bg-surface-container-lowest p-space-md shadow-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]">verified_user</span>
+<span class="font-title-md text-title-md text-on-surface font-bold">촬영 및 개인정보 보호 안내</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-md text-label-md">필수 동의</span>
+</div>
+<div class="mt-space-sm p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-1.5">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">lock</span>
+<p class="font-body-md text-body-md text-on-surface leading-snug" style="word-break: keep-all;">
+<strong class="font-semibold text-primary">이름, 연락처 등 일체의 개인정보를 수집하지 않습니다.</strong>
+</p>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-[13px] pl-6 leading-relaxed" style="word-break: keep-all;">
+          체험에 사용된 안면 데이터는 행사 종료 당일 즉시 영구 삭제 처리됩니다.
+        </p>
+</div>
+<!-- Consent Interactive Checkbox -->
+<div class="mt-space-md flex items-start gap-3 p-3 rounded-lg bg-surface-container cursor-pointer select-none" onclick="toggleConsent()">
+<div class="mt-0.5 w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center shrink-0 transition-colors" id="consent-check">
+<span class="material-symbols-outlined text-[16px] text-transparent transition-colors" id="consent-check-icon">check</span>
+</div>
+<div class="flex-1">
+<p class="font-title-md text-[14px] text-on-surface font-semibold leading-snug" style="word-break: keep-all;">
+            얼굴 사진 촬영 및 메이크업 엔진 처리 동의
+          </p>
+<span class="font-label-md text-label-md text-secondary block mt-1" id="consent-warning" style="word-break: keep-all;">
+            * 미동의 시 컬러 드레이핑(미촬영) 코스만 진행 가능합니다.
+          </span>
+</div>
+</div>
+<!-- Technical Details Accordion Toggle -->
+<div class="mt-space-sm">
+<button class="w-full flex items-center justify-between py-2 text-on-surface-variant hover:text-on-surface transition-colors" onclick="toggleDetails()" type="button">
+<span class="font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">info</span>
+            데이터 처리 및 보안 기술 상세 보기
+          </span>
+<span class="material-symbols-outlined text-[18px] transition-transform duration-200" id="accordion-arrow">expand_more</span>
+</button>
+<div class="hidden mt-1 p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-2" id="tech-details">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-tertiary shrink-0 mt-0.5">dns</span>
+<div class="flex flex-col">
+<span class="font-title-md text-[13px] text-on-surface font-medium">로컬 엣지 처리</span>
+<span class="font-body-md text-[12px] text-on-surface-variant">퍼스널컬러 진단 알고리즘은 부스 디바이스 내부에서 안전하게 실행됩니다.</span>
+</div>
+</div>
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-tertiary shrink-0 mt-0.5">enhanced_encryption</span>
+<div class="flex flex-col">
+<span class="font-title-md text-[13px] text-on-surface font-medium">안전한 가상 메이크업 API</span>
+<span class="font-body-md text-[12px] text-on-surface-variant">Perfect Corp(YouCam) 정밀 렌더링 엔진으로 암호화 전송 후 세션 종료 시 즉각 휘발됩니다.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Active Status Summary Banner -->
+<div class="rounded-xl bg-secondary-fixed/40 p-space-sm flex items-center justify-between" id="status-chip-container">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary animate-ping shrink-0"></span>
+<span class="font-label-md text-label-md text-on-secondary-fixed-variant" id="course-status-label">
+          선택된 코스: [메이크업 코스] · 동의 필요
+        </span>
+</div>
+<span class="font-label-md text-label-md text-secondary font-semibold">1/3 단계</span>
+</div>
+<!-- Primary Action CTA Button -->
+<div class="pt-space-xs pb-space-lg flex flex-col gap-2">
+<button class="w-full py-4 px-6 rounded-full bg-primary text-on-primary shadow-lg flex items-center justify-center gap-2 font-title-md text-title-md font-bold transition-all active:scale-[0.98]" id="cta-button" onclick="startExperience()">
+<span id="cta-text" class="">체험 시작하기 (촬영 부스로 이동)</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<p class="text-center font-label-md text-label-md text-on-surface-variant" id="cta-subtext">
+        카메라 센서가 사용자의 얼굴을 자동으로 인식합니다.
+      </p>
+</div>
+</div>
+</div>
+<script>
+  let currentCourse = 'makeup';
+  let isConsented = false;
+
+  function updateUI() {
+    const cardMakeup = document.getElementById('course-makeup');
+    const cardColor = document.getElementById('course-color');
+    const radioMakeup = document.getElementById('radio-makeup');
+    const radioColor = document.getElementById('radio-color');
+    const ctaButton = document.getElementById('cta-button');
+    const ctaText = document.getElementById('cta-text');
+    const ctaSubtext = document.getElementById('cta-subtext');
+    const statusLabel = document.getElementById('course-status-label');
+    const consentWarning = document.getElementById('consent-warning');
+
+    if (currentCourse === 'makeup') {
+      cardMakeup.classList.add('shadow-md');
+      cardMakeup.classList.remove('shadow-sm');
+      cardColor.classList.add('shadow-sm');
+      cardColor.classList.remove('shadow-md');
+
+      radioMakeup.className = 'w-5 h-5 rounded-full bg-primary flex items-center justify-center transition-all';
+      radioMakeup.innerHTML = '<span class="w-2 h-2 rounded-full bg-on-primary"></span>';
+
+      radioColor.className = 'w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center transition-all';
+      radioColor.innerHTML = '<span class="w-2 h-2 rounded-full bg-transparent"></span>';
+
+      if (!isConsented) {
+        ctaButton.classList.add('opacity-50');
+        ctaText.textContent = '동의 후 촬영 부스로 이동';
+        ctaSubtext.textContent = '메이크업 코스는 얼굴 사진 촬영 동의가 필수입니다.';
+        statusLabel.textContent = '선택: 메이크업 코스 (촬영 동의 대기 중)';
+        consentWarning.classList.add('font-bold', 'text-primary');
+      } else {
+        ctaButton.classList.remove('opacity-50');
+        ctaText.textContent = '체험 시작하기 (촬영 부스로 이동)';
+        ctaSubtext.textContent = '카메라 센서가 사용자의 얼굴을 자동으로 인식합니다.';
+        statusLabel.textContent = '선택: 메이크업 코스 (준비 완료)';
+        consentWarning.classList.remove('font-bold', 'text-primary');
+      }
+    } else {
+      cardColor.classList.add('shadow-md');
+      cardColor.classList.remove('shadow-sm');
+      cardMakeup.classList.add('shadow-sm');
+      cardMakeup.classList.remove('shadow-md');
+
+      radioColor.className = 'w-5 h-5 rounded-full bg-primary flex items-center justify-center transition-all';
+      radioColor.innerHTML = '<span class="w-2 h-2 rounded-full bg-on-primary"></span>';
+
+      radioMakeup.className = 'w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center transition-all';
+      radioMakeup.innerHTML = '<span class="w-2 h-2 rounded-full bg-transparent"></span>';
+
+      ctaButton.classList.remove('opacity-50');
+      ctaText.textContent = '진단천 드레이핑 시작하기';
+      ctaSubtext.textContent = '사진 촬영 없이 계절별 진단천 시뮬레이션으로 이동합니다.';
+      statusLabel.textContent = '선택: 컬러 드레이핑 코스 (미촬영 진행)';
+    }
+  }
+
+  function selectCourse(course) {
+    currentCourse = course;
+    updateUI();
+  }
+
+  function toggleConsent() {
+    isConsented = !isConsented;
+    const checkEl = document.getElementById('consent-check');
+    const iconEl = document.getElementById('consent-check-icon');
+
+    if (isConsented) {
+      checkEl.className = 'mt-0.5 w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0 transition-colors';
+      iconEl.className = 'material-symbols-outlined text-[16px] text-on-primary transition-colors';
+    } else {
+      checkEl.className = 'mt-0.5 w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center shrink-0 transition-colors';
+      iconEl.className = 'material-symbols-outlined text-[16px] text-transparent transition-colors';
+      if (currentCourse === 'makeup') {
+        selectCourse('color');
+      }
+    }
+    updateUI();
+  }
+
+  function toggleDetails() {
+    const details = document.getElementById('tech-details');
+    const arrow = document.getElementById('accordion-arrow');
+    const isHidden = details.classList.contains('hidden');
+    if (isHidden) {
+      details.classList.remove('hidden');
+      arrow.style.transform = 'rotate(180deg)';
+    } else {
+      details.classList.add('hidden');
+      arrow.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  function startExperience() {
+    if (currentCourse === 'makeup' && !isConsented) {
+      alert('메이크업 코스는 안면 분석 및 촬영 동의가 필요합니다. 동의를 체크하거나 컬러 드레이핑 코스를 선택해주세요.');
+      return;
+    }
+    const targetPath = currentCourse === 'makeup' ? 'capture' : 'dashboard';
+    window.location.hash = targetPath;
+  }
+
+  document.addEventListener('DOMContentLoaded', updateUI);
+  updateUI();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-16 px-gutter"><a aria-current="page" class="flex flex-col items-center justify-center w-24 h-12 transition-colors text-primary font-bold" data-path="start" href="#"><span class="material-symbols-outlined text-[22px]">how_to_reg</span><span class="font-label-md text-label-md tracking-wider mt-0.5">1. 시작 &amp; 동의</span></a><a class="flex flex-col items-center justify-center w-24 h-12 text-on-surface-variant transition-colors" data-path="capture" href="#"><span class="material-symbols-outlined text-[22px]">photo_camera</span><span class="font-label-md text-label-md tracking-wider mt-0.5">2. 촬영 &amp; 분석</span></a><a class="flex flex-col items-center justify-center w-24 h-12 text-on-surface-variant transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[22px]">palette</span><span class="font-label-md text-label-md tracking-wider mt-0.5">3. 진단 &amp; 뷰어</span></a></div></nav>
+
+</body></html>
