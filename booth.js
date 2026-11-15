@@ -371,7 +371,14 @@
       if (details.open) loadDetails();
     }
 
-    slider.addEventListener("input", () => { byId("intensity-value").value = slider.value; });
+    function readIntensity() {
+      const value = Number(slider.value);
+      const intensity = Number.isFinite(value) ? Math.max(0, Math.min(20, Math.round(value))) : 15;
+      slider.value = intensity;
+      byId("intensity-value").value = String(intensity);
+      return intensity;
+    }
+    slider.addEventListener("input", readIntensity);
     const updateSplit = () => byId("comparison-frame").style.setProperty("--split", split.value + "%");
     split.addEventListener("input", updateSplit);
 
@@ -395,7 +402,7 @@
       status.textContent = "가상 메이크업을 적용하는 중이에요.";
       const request = Object.fromEntries(new FormData(form));
       request.analysis_id = id;
-      request.intensity = Number(slider.value);
+      request.intensity = readIntensity();
 
       try {
         let completedMessage = "테스트 이미지에 색상을 적용했어요.";

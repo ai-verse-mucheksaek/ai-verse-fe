@@ -244,15 +244,15 @@ const picture='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
    assert.equal(await page.locator('[name="blush_color"]').inputValue(),'#d9a0bb');
    assert.equal(await page.locator('[name="eye_color"]').inputValue(),'#9a7f9d');
    assert.equal(await page.locator('#lip-products').count(),0);
-   assert.equal(await page.locator('#makeup-intensity').inputValue(),'55');
-   assert.equal(await page.locator('#makeup-intensity').getAttribute('max'),'100');
+   assert.equal(await page.locator('#makeup-intensity').inputValue(),'15');
+   assert.equal(await page.locator('#makeup-intensity').getAttribute('max'),'20');
    assert.equal(calls('POST','/try-ons').length,0);
    state.expectedLip=product.color_hex.toLowerCase();
    await page.locator('#makeup-consent').check();
    await page.locator('#apply-makeup').click();
    await page.locator('#comparison').waitFor({state:'visible'});
   }
-  record('계절별 롬앤 립 초기값과 해당 HEX 전송, 블러셔·아이·강도 기존값 유지');
+  record('계절별 롬앤 립 초기값과 해당 HEX 전송, 블러셔·아이 유지, 발색 강도 기본 15·최대 20');
 
   fresh();await page.goto(base+'2.html');
   const pngBuffer=Buffer.from(await page.evaluate(()=>{
