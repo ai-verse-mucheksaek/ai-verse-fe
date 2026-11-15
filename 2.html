@@ -30,6 +30,13 @@
   <div class="capture-layout">
     <section class="camera-card card stack" aria-labelledby="capture-title">
       <div class="panel-heading"><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l2-3h4l2 3h4v14H4V6z"/><circle cx="12" cy="12" r="4"/></svg> PHOTO BOOTH</span><span class="pill">STEP 02</span></div>
+      <section class="consent-panel stack" aria-labelledby="consent-title">
+        <h2 id="consent-title">촬영 전, 확인해 주세요</h2>
+        <p>운영자에게 개인정보 수집·이용 안내를 받고 서면 동의 후 체크해 주세요. 얼굴 사진은 퍼스널컬러 분석에 사용돼요.</p>
+        <p>사진·결과는 서버 설정에 따라 보관돼요(기본 24시간). 결과 화면의 보관 만료 예정 시각 이후 서버 정리 작업에서 삭제되며, 즉시 삭제도 요청할 수 있어요.</p>
+        <label class="consent-choice" for="photo-consent"><input id="photo-consent" type="checkbox"><span>안내를 확인했고, 얼굴 사진 촬영·분석에 동의합니다.</span></label>
+        <p class="hint">동의하지 않으면 촬영 없이 운영자와 진단천 체험을 즐길 수 있어요. 가상 메이크업의 외부 전송은 결과 화면에서 별도로 확인해요.</p>
+      </section>
       <div class="camera-frame">
         <video id="camera-video" autoplay muted playsinline hidden></video>
         <img id="captured-photo" alt="촬영한 얼굴 사진" hidden>

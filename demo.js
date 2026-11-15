@@ -2,6 +2,96 @@ const boothDemo = (() => {
   const demoResult = {
     season: "summer",
     season_ko: "여름 쿨톤",
+    analyzer: "v2",
+    reliability: "medium",
+    warning_messages: ["예시 안내: 두 계절의 특징이 비슷하면 진단천으로 직접 비교해 보세요."],
+    reasons: ["예시 분석 근거: 밝고 부드러운 색상 조합을 추천해요."],
+    season_scores: { summer: 0.62, spring: 0.25, autumn: 0.08, winter: 0.05 },
+    content: {
+    "season": "summer",
+    "season_ko": "여름 쿨톤",
+    "score": 0.62,
+    "summary": "붉은·분홍 기가 도는 밝은 피부에 부드럽고 시원한 파스텔이 잘 어울려요.",
+    "keywords": [
+        "청량함",
+        "부드러움",
+        "밝은 쿨"
+    ],
+    "palette": [
+        {
+            "name": "라벤더",
+            "hex": "#B9A6D9"
+        },
+        {
+            "name": "파우더 블루",
+            "hex": "#A7C7E7"
+        },
+        {
+            "name": "로즈 핑크",
+            "hex": "#E6A1B5"
+        },
+        {
+            "name": "민트",
+            "hex": "#A8D8C8"
+        },
+        {
+            "name": "소프트 그레이",
+            "hex": "#B7BCC4"
+        },
+        {
+            "name": "라이트 네이비",
+            "hex": "#5B6B8C"
+        }
+    ],
+    "makeup": [
+        {
+            "category": "lip",
+            "name": "로즈 핑크",
+            "hex": "#C85A7C"
+        },
+        {
+            "category": "blush",
+            "name": "라벤더 핑크",
+            "hex": "#D9A0BB"
+        },
+        {
+            "category": "eye",
+            "name": "소프트 모브",
+            "hex": "#9A7F9D"
+        }
+    ],
+    "clothes": {
+        "best": [
+            "라벤더",
+            "하늘색",
+            "로즈 핑크",
+            "쿨 그레이",
+            "소프트 화이트",
+            "라이트 네이비"
+        ],
+        "avoid": [
+            "오렌지",
+            "머스터드",
+            "진한 카키·브라운"
+        ]
+    },
+    "hair": [
+        "애쉬 브라운",
+        "쿨 다크 브라운",
+        "애쉬 계열"
+    ],
+    "accessory": {
+        "metal": "silver",
+        "metal_ko": "실버",
+        "tip": "실버나 화이트 골드가 피부를 맑아 보이게 해 줘요."
+    },
+    "booth_lip": "롬앤 피그피그",
+    "second_season": {
+        "season": "spring",
+        "season_ko": "봄 웜톤",
+        "score": 0.25
+    }
+},
     palette: ["#D98CA3", "#B39DDB", "#90CAF9", "#B0BEC5", "#E6A8C5"],
     recommendations: [
       { category: "lip", name: "로즈 핑크", color: "#C85A7C" },
