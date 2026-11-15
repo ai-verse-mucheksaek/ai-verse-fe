@@ -1,226 +1,53 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-high": "#e5e8f2", "background": "#f9f9ff", "tertiary-fixed": "#ebddff", "on-surface": "#181c23", "on-secondary": "#ffffff", "error-container": "#ffdad6", "outline-variant": "#dcc0c0", "surface-container-low": "#f1f3fd", "on-tertiary": "#ffffff", "on-background": "#181c23", "primary-fixed-dim": "#ffb3b6", "on-error": "#ffffff", "outline": "#897172", "on-secondary-container": "#7a3d30", "on-error-container": "#93000a", "surface-variant": "#dfe2ec", "surface": "#f9f9ff", "error": "#ba1a1a", "primary": "#9e3944", "primary-fixed": "#ffdada", "surface-container-lowest": "#ffffff", "on-tertiary-fixed-variant": "#4f3d71", "tertiary-fixed-dim": "#d2bcf9", "on-primary-container": "#fffbff", "on-secondary-fixed-variant": "#703629", "secondary-fixed": "#ffdad3", "on-primary-fixed-variant": "#822431", "on-tertiary-container": "#fffbff", "surface-container": "#ebeef7", "secondary-fixed-dim": "#ffb4a4", "inverse-on-surface": "#eef0fa", "inverse-surface": "#2d3138", "tertiary-container": "#7e6ba2", "inverse-primary": "#ffb3b6", "secondary-container": "#ffac9a", "tertiary": "#655388", "on-surface-variant": "#564242", "secondary": "#8d4c3e", "on-tertiary-fixed": "#221042", "on-primary-fixed": "#40000c", "on-secondary-fixed": "#390c04", "surface-dim": "#d7dae3", "surface-container-highest": "#dfe2ec", "surface-bright": "#f9f9ff", "surface-tint": "#a23b47", "on-primary": "#ffffff", "primary-container": "#be515c" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-sm": "0.5rem", "gutter-desktop": "2rem", "gutter": "1rem", "space-md": "1rem", "margin": "1rem", "space-xl": "2.5rem", "margin-desktop": "3rem", "gutter-tablet": "1.5rem", "margin-tablet": "2rem", "space-lg": "1.5rem", "space-xs": "0.25rem" }, "fontFamily": { "display-lg-mobile": ["Bodoni Moda"], "headline-lg-mobile": ["Bodoni Moda"], "body-lg": ["Manrope"], "headline-md": ["Bodoni Moda"], "headline-lg": ["Bodoni Moda"], "label-lg": ["Manrope"], "title-lg": ["Manrope"], "display-lg": ["Bodoni Moda"], "body-md": ["Manrope"], "title-md": ["Manrope"], "label-md": ["Manrope"] }, "fontSize": { "display-lg-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "500" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "500" }], "label-lg": ["13px", { "lineHeight": "18px", "letterSpacing": "0.04em", "fontWeight": "600" }], "title-lg": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0.01em", "fontWeight": "400" }], "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "600" }], "label-md": ["11px", { "lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700" }] } } } }</script><style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen" style="word-break: keep-all;"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="It's Me Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrC8n33ATjlxtwe-gZHt1wv8X9sOnIv1VV9eq0-2Wo8_UTBRWZX7Ie2lTSs_jz1C-_0uaJtZmzCYzBqWo9rBtZJiDTkUmtYw-msYn7tPg_smkj4rSrPWlxAa4q2zgLF9OX7mFUcLf3VodqPg_Qc59Bp3Q7tIAYUY9dnaMVjYNfSPWzmyR6CltzJFEmDgVz9Qt4BMVDBWxAQrFSGnBsD-w2dIszkpDmRQK7UKcbk7AKx3"><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-md text-title-md text-primary font-bold tracking-tight">예뻐질 사람? It’s Me!</span><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-label-md text-label-md"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>LIVE 현장 부스</span></div><span class="font-label-md text-label-md text-on-surface-variant font-medium">Capture</span></div></div><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface pb-24"><div class="flex flex-col w-full px-gutter pb-space-lg gap-space-md">
-<!-- Status & Session Banner -->
-<div class="flex items-center justify-between py-space-xs">
-<div class="flex items-center gap-space-xs">
-<span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
-<span class="font-label-md text-label-md text-primary tracking-widest">BOOTH #04 STUDIO SESSION</span>
-</div>
-<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md shadow-sm">
-<span class="material-symbols-outlined text-[15px] text-primary">hdr_auto</span>
-<span class="">4K 스튜디오 센서 ON</span>
-</div>
-</div>
-<!-- Camera Viewfinder Kiosk Frame -->
-<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden bg-inverse-surface shadow-xl flex flex-col justify-between p-space-md select-none">
-<!-- Simulated Camera Feed Background -->
-<div class="absolute inset-0 bg-cover bg-center opacity-85 scale-105 transition-transform duration-700" data-alt="High-fashion Korean beauty portrait shot in a professional Cheongdam-dong color analysis photo booth. Soft studio glow lighting, minimalist neutral backdrop, crystal clear skin texture, subtle ambient catchlights in the eyes, high editorial aesthetic with warm soft peach undertones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAPu4gtMc94ZH5KdjYlg8NTfEOymkQdixZtGsNe6cJAUu62WKSfwDOzjdShzNuHp4WYKRhrnL5vvK4ZqPg6wFwjl6DJyzma4nQZyoeg42YyvxGZEGmUtGlRne621DGiXl-hWkqK6VgGbWToPWLz-rPzlkY95r2wDQ0QSGneFGbfj1H2ERSE01os19fHIpquJ_K9nkWxTFKm8JJAKXCzrolB3h8lMxdDrzN7oeAQ70M')"></div>
-<!-- Vignette & Glow Gradients (No Borders) -->
-<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface via-transparent to-inverse-surface/60 pointer-events-none"></div>
-<!-- Top Viewfinder Header & Environmental Indicators -->
-<div class="relative z-10 flex flex-col gap-2">
-<!-- Environmental Quality Pills -->
-<div class="flex flex-wrap items-center gap-1.5">
-<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-inverse-surface/80 backdrop-blur-md text-surface font-label-md text-label-md shadow-sm">
-<span class="w-1.5 h-1.5 rounded-full bg-primary-fixed"></span>
-<span class="">조명 5,400K 자동 측정</span>
-</div>
-<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-inverse-surface/80 backdrop-blur-md text-surface font-label-md text-label-md shadow-sm">
-<span class="material-symbols-outlined text-primary-fixed-dim text-[13px]">check_circle</span>
-<span class="">그레이카드 밸런스: OK</span>
-</div>
-<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-inverse-surface/80 backdrop-blur-md text-surface font-label-md text-label-md shadow-sm">
-<span class="material-symbols-outlined text-secondary-fixed text-[13px]">visibility</span>
-<span class="">정면 응시 일치</span>
-</div>
-</div>
-</div>
-<!-- Center Face Alignment Overlay & Kinetic Landmarks -->
-<div class="relative z-10 flex flex-col items-center justify-center my-auto w-full">
-<!-- Oval Reticle with Animated Mesh Dots -->
-<div class="relative w-56 h-72 flex items-center justify-center">
-<!-- Diffused Oval Glow Backdrop -->
-<div class="absolute inset-0 rounded-full bg-primary/10 blur-xl animate-pulse"></div>
-<!-- SVG Oval Hairline & Coordinate Markers -->
-<svg class="absolute inset-0 w-full h-full pointer-events-none" fill="none" viewBox="0 0 224 288">
-<!-- Guide Oval -->
-<ellipse class="text-primary-fixed/80" cx="112" cy="144" rx="98" ry="132" stroke="currentColor" stroke-dasharray="6 4" stroke-width="1.5"></ellipse>
-<!-- Eye Line Level -->
-<line class="text-surface/40" stroke="currentColor" stroke-dasharray="2 3" stroke-width="0.75" x1="36" x2="188" y1="126" y2="126"></line>
-<!-- Center Meridian -->
-<line class="text-surface/40" stroke="currentColor" stroke-dasharray="2 3" stroke-width="0.75" x1="112" x2="112" y1="20" y2="268"></line>
-<!-- Feature Anchor Points -->
-<circle class="fill-primary animate-ping" cx="82" cy="126" r="3"></circle>
-<circle class="fill-primary animate-ping" cx="142" cy="126" r="3" style="animation-delay: 200ms;"></circle>
-<circle class="fill-primary-fixed" cx="112" cy="180" r="2.5"></circle>
-<circle class="fill-secondary-container" cx="112" cy="214" r="3.5"></circle>
-</svg>
-<!-- Dynamic Countdown Bubble (Interactive/Animated) -->
-<div class="w-16 h-16 rounded-full bg-primary/90 text-on-primary backdrop-blur-md shadow-xl flex items-center justify-center transform transition-transform duration-300 scale-125 bg-primary-container" id="countdown-display"><span class="material-symbols-outlined text-[26px]">check</span></div>
-</div>
-<!-- Live User Alignment Notice -->
-<div class="mt-3 px-3.5 py-1.5 rounded-full bg-inverse-surface/85 backdrop-blur-md text-surface flex items-center gap-1.5 shadow-md">
-<span class="material-symbols-outlined text-[16px] text-primary-fixed">center_focus_strong</span>
-<span class="font-label-lg text-label-lg font-medium">얼굴을 타원형 가이드선에 맞춰주세요</span>
-</div>
-</div>
-<!-- Bottom Viewfinder Controls Deck -->
-<div class="relative z-10 flex items-center justify-between w-full pt-space-xs">
-<!-- Retake / Flash Button -->
-<button aria-label="조명 토글" class="w-11 h-11 rounded-full bg-inverse-surface/80 backdrop-blur-md text-surface flex items-center justify-center shadow-md active:scale-95 transition-transform" type="button">
-<span class="material-symbols-outlined text-[20px] text-primary-fixed">flash_on</span>
-</button>
-<!-- Center Big Shutter Button -->
-<button class="group relative flex items-center justify-center w-16 h-16 rounded-full bg-surface shadow-2xl active:scale-90 transition-transform" id="shutter-btn" type="button">
-<span class="w-13 h-13 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary-container transition-colors">
-<span class="material-symbols-outlined text-on-primary text-[28px]">photo_camera</span>
-</span>
-</button>
-<!-- Audio Prompt Toggle -->
-<button aria-label="음성 안내 켜기" class="w-11 h-11 rounded-full bg-inverse-surface/80 backdrop-blur-md text-surface flex items-center justify-center shadow-md active:scale-95 transition-transform" type="button">
-<span class="material-symbols-outlined text-[20px] text-surface">volume_up</span>
-</button>
-</div>
-</div>
-<!-- Helpful Pro-Tip Ribbon -->
-<div class="flex items-start gap-space-sm p-3.5 rounded-xl bg-secondary-fixed/40 text-on-secondary-fixed-variant shadow-sm">
-<div class="w-7 h-7 rounded-full bg-secondary text-on-secondary flex items-center justify-center shrink-0 mt-0.5">
-<span class="material-symbols-outlined text-[16px]">lightbulb</span>
-</div>
-<div class="flex flex-col">
-<span class="font-title-md text-title-md font-bold text-on-surface">더 완벽한 진단을 위한 팁</span>
-<p class="font-body-md text-body-md text-on-surface-variant leading-snug mt-0.5" style="word-break: keep-all;">
-        안경 또는 마스크는 잠시 벗어주시면 입술·볼·피부톤의 세밀한 Lab 스펙트럼 추출이 훨씬 정확해집니다.
-      </p>
-</div>
-</div>
-<!-- Live Technical AI Diagnostics Pipeline -->
-<div class="flex flex-col gap-space-sm">
-<div class="flex items-center justify-between px-space-xs">
-<div class="flex items-center gap-1.5">
-<span class="font-headline-md text-headline-md font-bold text-on-surface">AI 톤 스캐닝 파이프라인</span>
-<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md">LIVE</span>
-</div>
-<span class="font-label-lg text-label-lg text-primary font-bold">2/3 분석 진행</span>
-</div>
-<!-- Progress Indicator Bar -->
-<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
-<div class="h-full bg-primary rounded-full transition-all duration-500" id="pipeline-progress" style="width: 72%;"></div>
-</div>
-<!-- Step 1: MediaPipe Face Landmarker (Completed) -->
-<div class="flex items-center gap-space-sm p-space-md rounded-xl bg-surface-container-lowest shadow-sm">
-<div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex items-center justify-between">
-<span class="font-title-md text-title-md text-on-surface font-semibold truncate">1. MediaPipe Face Landmarker</span>
-<span class="inline-flex px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md">완료됨</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface-variant truncate mt-0.5">피부, 양안 홍채, 입술 478개 3D 랜드마크 추출</p>
-</div>
-</div>
-<!-- Step 2: Lab Color Space & Median Analysis (Active 85%) -->
-<div class="flex flex-col p-space-md rounded-xl bg-surface-container-lowest shadow-md gap-space-sm">
-<div class="flex items-center gap-space-sm">
-<div class="w-9 h-9 rounded-full bg-primary-fixed flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-primary text-[20px] animate-spin">sync</span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex items-center justify-between">
-<span class="font-title-md text-title-md text-primary font-bold truncate">2. CIE-Lab 색공간 변환 &amp; 중앙값 산출</span>
-<span class="inline-flex px-2 py-0.5 rounded-full bg-primary text-on-primary font-label-md text-label-md font-semibold">85% 진행</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface-variant truncate mt-0.5">L*(명도), a*(붉은기), b*(노란기) 멜라닌 보정 연산</p>
-</div>
-</div>
-<!-- Mini Sub-metric Swatch Tiles -->
-<div class="grid grid-cols-3 gap-2 pt-1">
-<div class="flex flex-col p-2 rounded-lg bg-surface-container-low text-center">
-<span class="font-label-md text-label-md text-on-surface-variant">L* (명도 지수)</span>
-<span class="font-title-md text-title-md font-bold text-on-surface">68.4</span>
-</div>
-<div class="flex flex-col p-2 rounded-lg bg-surface-container-low text-center">
-<span class="font-label-md text-label-md text-on-surface-variant">a* (웜/쿨 척도)</span>
-<span class="font-title-md text-title-md font-bold text-primary">+12.1</span>
-</div>
-<div class="flex flex-col p-2 rounded-lg bg-surface-container-low text-center">
-<span class="font-label-md text-label-md text-on-surface-variant">b* (채도 편차)</span>
-<span class="font-title-md text-title-md font-bold text-secondary">+16.8</span>
-</div>
-</div>
-</div>
-<!-- Step 3: YouCam Facial Color Tone Validation (Standby) -->
-<div class="flex items-center gap-space-sm p-space-md rounded-xl bg-surface-container-low shadow-sm opacity-75">
-<div class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-outline text-[20px]">hourglass_empty</span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="flex items-center justify-between">
-<span class="font-title-md text-title-md text-on-surface font-semibold truncate">3. YouCam 톤 검증 &amp; 계절 매핑</span>
-<span class="inline-flex px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md">대기 중</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface-variant truncate mt-0.5">봄 웜 / 여름 쿨 / 가을 웜 / 겨울 쿨 최종 확정</p>
-</div>
-</div>
-</div>
-<!-- Bottom Action Confirmation -->
-<div class="pt-space-xs">
-<button class="w-full h-13 py-3 rounded-full bg-primary text-on-primary font-title-md text-title-md font-bold shadow-lg flex items-center justify-center gap-2 active:scale-98 transition-all hover:bg-primary-container" type="button">
-<span class="">실시간 정밀 촬영 완료하기</span>
-<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
-</div>
-</div>
-<script>
-  // Countdown Timer Micro-Interaction
-  (function initBoothTimer() {
-    const numEl = document.getElementById('countdown-number');
-    const displayEl = document.getElementById('countdown-display');
-    const shutterBtn = document.getElementById('shutter-btn');
-    if (!numEl || !displayEl || !shutterBtn) return;
-
-    let count = 3;
-    let timer = setInterval(runTick, 1000);
-
-    function runTick() {
-      count--;
-      if (count > 0) {
-        numEl.textContent = count;
-        displayEl.classList.add('scale-110');
-        setTimeout(() => displayEl.classList.remove('scale-110'), 200);
-      } else if (count === 0) {
-        numEl.innerHTML = '<span class="material-symbols-outlined text-[26px]">camera</span>';
-        displayEl.classList.add('scale-125', 'bg-primary-container');
-      } else {
-        clearInterval(timer);
-        displayEl.innerHTML = '<span class="material-symbols-outlined text-[26px]">check</span>';
-        setTimeout(() => {
-          count = 3;
-          numEl.textContent = count;
-          displayEl.classList.remove('scale-125', 'bg-primary-container');
-          timer = setInterval(runTick, 1000);
-        }, 4000);
-      }
-    }
-
-    shutterBtn.addEventListener('click', () => {
-      clearInterval(timer);
-      count = 3;
-      numEl.textContent = '찰칵';
-      displayEl.classList.add('scale-125');
-      setTimeout(() => {
-        displayEl.classList.remove('scale-125');
-        numEl.textContent = count;
-        timer = setInterval(runTick, 1000);
-      }, 1500);
-    });
-  })();
-</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-16 px-gutter"><a class="flex flex-col items-center justify-center w-24 h-12 text-on-surface-variant transition-colors" data-path="start" href="#"><span class="material-symbols-outlined text-[22px]">how_to_reg</span><span class="font-label-md text-label-md tracking-wider mt-0.5">1. 시작 &amp; 동의</span></a><a aria-current="page" class="flex flex-col items-center justify-center w-24 h-12 transition-colors text-primary font-bold" data-path="capture" href="#"><span class="material-symbols-outlined text-[22px]">photo_camera</span><span class="font-label-md text-label-md tracking-wider mt-0.5">2. 촬영 &amp; 분석</span></a><a class="flex flex-col items-center justify-center w-24 h-12 text-on-surface-variant transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[22px]">palette</span><span class="font-label-md text-label-md tracking-wider mt-0.5">3. 진단 &amp; 뷰어</span></a></div></nav>
-
-</body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#f9f9ff">
+  <title>얼굴 촬영 | 무채색에서 살아남기</title>
+  <link rel="stylesheet" href="booth.css">
+  <script defer src="api.js"></script><script defer src="capture.js"></script><script defer src="demo.js"></script><script defer src="booth.js"></script>
+</head>
+<body data-page="capture" data-test-mode>
+<a class="skip-link" href="#main">본문으로 바로가기</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="1.html"><span class="brand-mark"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z"/></svg></span><span>AI:VERSE<small>PERSONAL COLOR STUDIO</small></span></a>
+    <div class="header-right"><span class="booth-badge"><span></span>현장 체험 부스</span><span class="header-label">Find your own color.</span></div>
+  </div>
+</header>
+<nav class="wrap step-nav" aria-label="체험 진행 단계"><ol class="steps"><li><span class="step-number">01</span><span>시작<small>Start</small></span></li><li aria-current="step"><span class="step-number">02</span><span>촬영<small>Capture</small></span></li><li><span class="step-number">03</span><span>결과<small>Discover</small></span></li><li><span class="step-number">04</span><span>QR 카드<small>Keep</small></span></li></ol></nav>
+<main class="wrap stack page-main" id="main">
+  <div class="page-heading"><p class="eyebrow">THE FIRST IMPRESSION</p><h1 id="capture-title">가장 자연스러운,<br><em>지금의 나를 담아요.</em></h1><p class="lede">정면을 보고, 얼굴을 가이드 안에 맞춰 주세요.</p></div>
+  <aside class="test-tools preview-navigation" aria-label="임시 화면 이동">
+    <div><strong>디자인 미리보기</strong><p>촬영 없이 다음 화면으로 이동해요. 예시 결과가 표시됩니다.</p></div>
+    <div class="actions">
+      <a class="button secondary" id="skip-capture" href="3.html?demo=1">3페이지 · 결과 보기 ↗</a>
+      <a class="button secondary" href="4.html?demo=1">4페이지 · QR 보기 ↗</a>
+    </div>
+  </aside>
+  <div class="capture-layout">
+    <section class="camera-card card stack" aria-labelledby="capture-title">
+      <div class="panel-heading"><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l2-3h4l2 3h4v14H4V6z"/><circle cx="12" cy="12" r="4"/></svg> PHOTO BOOTH</span><span class="pill">STEP 02</span></div>
+      <div class="camera-frame">
+        <video id="camera-video" autoplay muted playsinline hidden></video>
+        <img id="captured-photo" alt="촬영한 얼굴 사진" hidden>
+        <div id="camera-guide" class="camera-guide" aria-hidden="true" hidden></div>
+        <div id="camera-placeholder" class="camera-placeholder"><div class="placeholder-oval"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l2-3h4l2 3h4v14H4V6z"/><circle cx="12" cy="12" r="4"/></svg></div><strong>조금 더 나다운 한 장</strong><p>카메라를 켜고 얼굴을 가이드에 맞춰 주세요.</p></div>
+        <span class="frame-corner top-left" aria-hidden="true"></span><span class="frame-corner bottom-right" aria-hidden="true"></span>
+        <span id="countdown" class="countdown" aria-hidden="true" hidden></span>
+      </div>
+      <p id="capture-status" class="status" role="status" aria-live="polite"></p><p id="capture-error" class="error" role="alert" hidden></p>
+      <div class="actions camera-actions"><button class="button primary" type="button" id="open-camera"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l2-3h4l2 3h4v14H4V6z"/><circle cx="12" cy="12" r="4"/></svg> 카메라 켜기</button><button class="button primary" type="button" id="take-photo" hidden>3초 뒤 촬영</button><button class="button primary" type="button" id="analyze-photo" hidden>이 사진으로 분석 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button><button class="button secondary" type="button" id="retake-photo" hidden>다시 찍기</button><a class="button plain" href="1.html">처음으로</a></div>
+      <p class="hint camera-bottom-note">촬영 후 사진을 확인하고 다시 찍을 수 있어요.</p>
+    </section>
+    <aside class="capture-sidebar stack">
+      <section class="card tips-card stack"><p class="eyebrow">A BETTER COLOR MATCH</p><h2>작은 준비로,<br>더 자연스러운 컬러.</h2><ol class="feature-list"><li><span>01</span><div><strong>빛을 골고루 받아요</strong><p>얼굴에 짙은 그림자가 생기지 않도록 해주세요.</p></div></li><li><span>02</span><div><strong>얼굴 전체가 보이게</strong><p>마스크나 얼굴을 가리는 머리카락을 정리해 주세요.</p></div></li><li><span>03</span><div><strong>필터 없이, 정면으로</strong><p>보정 없이 카메라를 편안하게 바라봐 주세요.</p></div></li></ol></section>
+      <div class="soft-note"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z"/></svg><p>조명과 카메라에 따라 결과가 달라질 수 있어요. 나에게 어울리는 색을 찾아보는 체험으로 즐겨주세요.</p></div>
+    </aside>
+  </div>
+</main>
+<footer class="site-footer wrap"><span>AI:VERSE <span class="footer-star">✦</span> 무채색에서 살아남기</span><span class="serif">A little color, a little more you.</span></footer>
+</body>
+</html>
