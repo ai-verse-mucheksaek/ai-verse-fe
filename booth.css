@@ -414,6 +414,48 @@ body[data-mode="public"] .header-right { display: none; }
   .report-letterhead .eyebrow { font-size: 7px; letter-spacing: .09em; }
   .report-signoff { font-size: 18px; }
 }
+.palette { grid-template-columns: repeat(var(--palette-count, 5), minmax(0, 1fr)); }
+.swatch-chip { overflow-wrap: anywhere; word-break: normal; }
+.swatch-chip strong { font-family: "Malgun Gothic", sans-serif; font-size: 11px; font-weight: 500; }
+.result-summary { font-size: 14px; color: #6f5b70; line-height: 1.9; }
+.result-keywords { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: -12px 0 0; }
+.result-keywords li { padding: 4px 12px; border-radius: 30px; background: #f1eaf6; color: #80618a; font-size: 11px; }
+.result-quality { font-size: 12px; line-height: 1.9; }
+.result-quality ul, .result-reasons ul { margin: 8px 0 0; padding-left: 20px; }
+.quality-note { padding: 14px 18px; border-radius: 12px; border: 1px solid #e3dbea; background: #f4f0f8; color: #776282; }
+.season-scores { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; padding: 0; margin: 0; list-style: none; }
+.season-scores li > div:first-child { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 12px; color: #7a657a; margin-bottom: 8px; }
+.score-track { background: #f0eaf2; height: 6px; border-radius: 5px; overflow: hidden; }
+.score-track span { display: block; height: 100%; background: #b47d98; border-radius: 5px; }
+.score-note { margin-top: 14px; font-size: 10px; }
+.result-reasons { font-size: 12px; color: #766277; line-height: 1.9; }
+.result-reasons li + li { margin-top: 5px; }
+.booth-lip-note { padding: 17px 20px; border-radius: 14px; background: #fbf0f1; border: 1px solid #eedde1; color: #94505f; font-size: 12px; }
+.booth-lip-note p { font-size: 15px; color: #684c60; margin-top: 5px; }
+.consent-panel { border: 1px solid #e9dce5; border-radius: 14px; background: #fbf7fa; padding: 18px; gap: 10px; color: #786372; }
+.consent-panel h2 { font-size: 16px; }
+.consent-panel p { font-size: 11px; line-height: 1.9; }
+.consent-choice { display: flex; gap: 10px; align-items: start; min-height: 44px; cursor: pointer; font-size: 12px; line-height: 1.9; padding-block: 7px; }
+.consent-choice input { flex: 0 0 18px; width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--accent); cursor: pointer; }
+.session-controls { gap: 14px; width: min(100%, 970px); justify-self: center; }
+.session-controls h2 { font-size: 20px; }
+.share-card .session-controls { padding-top: 10px; text-align: left; }
+.share-card .session-controls .actions { justify-content: start; }
+.danger-outline { border-color: #d7a3ad; background: white; color: #963647; }
+.danger-outline:hover { background: #fbebee; }
+.delete-dialog { width: min(100% - 32px, 510px); border: 1px solid #e6d3dd; border-radius: 22px; padding: 28px; color: var(--ink); box-shadow: 0 20px 60px #40243526; }
+.delete-dialog::backdrop { background: #30233188; backdrop-filter: blur(3px); }
+.delete-dialog h2 { font-size: 23px; margin-bottom: 16px; }
+.delete-dialog > p { font-size: 13px; color: #7b6578; line-height: 1.9; margin-bottom: 22px; }
+.delete-dialog .actions { justify-content: end; }
+@media (max-width: 650px) {
+  .swatch-chip strong { font-size: 9px; }
+  .season-scores { grid-template-columns: 1fr; }
+  .result-summary { font-size: 12px; }
+  .consent-panel { padding: 15px; }
+  .session-controls .actions { align-items: stretch; }
+  .session-controls .actions > .button { flex: 1 1 210px; font-size: 12px; }
+}
 @media (max-width: 360px) {
   .steps small { display: none; }
   .steps li { gap: 5px; }

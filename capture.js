@@ -14,6 +14,7 @@ const boothCapture = (() => {
     const analyze = byId("analyze-photo");
     const status = byId("capture-status");
     const error = byId("capture-error");
+    const consent = byId("photo-consent");
     const lifecycle = new AbortController();
     let stream;
     let frame;
@@ -36,6 +37,11 @@ const boothCapture = (() => {
 
     async function openCamera() {
       if (open.disabled) return;
+      if (!consent.checked) {
+        showError(error, "촬영·분석 안내를 확인하고 동의 항목을 체크해 주세요.");
+        consent.focus();
+        return;
+      }
       showError(error);
       open.disabled = true;
       retake.disabled = true;
@@ -45,7 +51,7 @@ const boothCapture = (() => {
       try {
         const health = await api("/health", { signal: lifecycle.signal, timeoutMs: 4_000 });
         if (health.status !== "ok") throw new Error("분석 서버가 아직 준비되지 않았어요. 잠시 뒤 다시 시도해 주세요.");
-        if (lifecycle.signal.aborted) return;
+        if (lifecycle.signal.aborted || !consent.checked) return;
         if (!navigator.mediaDevices?.getUserMedia) {
           throw new Error("카메라를 쓰려면 부스 컴퓨터의 로컬 주소나 HTTPS 주소로 접속해 주세요.");
         }
@@ -54,14 +60,14 @@ const boothCapture = (() => {
           audio: false,
           video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 960 } },
         });
-        if (lifecycle.signal.aborted) {
+        if (lifecycle.signal.aborted || !consent.checked) {
           camera.getTracks().forEach((track) => track.stop());
           return;
         }
         stream = camera;
         video.srcObject = stream;
         await video.play();
-        if (lifecycle.signal.aborted) return;
+        if (lifecycle.signal.aborted || !consent.checked) return;
         clearPreview();
         analyze.hidden = true;
         retake.hidden = true;
@@ -73,7 +79,7 @@ const boothCapture = (() => {
         status.textContent = "준비가 되면 촬영 버튼을 눌러 주세요.";
         take.focus();
       } catch (cause) {
-        if (lifecycle.signal.aborted) return;
+        if (lifecycle.signal.aborted || !consent.checked) return;
         stopCamera();
         status.textContent = "";
         open.hidden = Boolean(frame);
@@ -111,7 +117,7 @@ const boothCapture = (() => {
       countdown.hidden = true;
       try {
         const captured = await captureFrame();
-        if (lifecycle.signal.aborted) return;
+        if (lifecycle.signal.aborted || !consent.checked) return;
         frame = captured;
         previewUrl = URL.createObjectURL(frame);
         photo.src = previewUrl;
@@ -133,7 +139,7 @@ const boothCapture = (() => {
     }
 
     function countDown() {
-      if (!stream || take.disabled) return;
+      if (!stream || take.disabled || !consent.checked) return;
       take.disabled = true;
       showError(error);
       let seconds = 3;
@@ -153,14 +159,20 @@ const boothCapture = (() => {
 
     async function analyzePhoto() {
       if (!frame || analyze.disabled) return;
+      if (!consent.checked) {
+        showError(error, "사진을 분석하려면 촬영·분석 동의를 확인해 주세요.");
+        consent.focus();
+        return;
+      }
       analyze.disabled = true;
       retake.disabled = true;
+      consent.disabled = true;
       showError(error);
       status.textContent = "퍼스널컬러를 분석하는 중이에요.";
       const form = new FormData();
       form.append("image", frame, "capture.jpg");
-      // Written consent is collected by the booth operator before starting this flow.
-      form.append("consent", "true");
+      // The operator collects written consent; the participant confirms it on this screen.
+      form.append("consent", String(consent.checked));
 
       try {
         const result = await api("/api/v1/analyses", {
@@ -181,6 +193,7 @@ const boothCapture = (() => {
       } finally {
         analyze.disabled = false;
         retake.disabled = false;
+        consent.disabled = false;
       }
     }
 
@@ -188,6 +201,22 @@ const boothCapture = (() => {
     retake.addEventListener("click", openCamera);
     take.addEventListener("click", countDown);
     analyze.addEventListener("click", analyzePhoto);
+    consent.addEventListener("change", () => {
+      if (consent.checked) return;
+      window.clearInterval(timer);
+      stopCamera();
+      clearPreview();
+      video.hidden = true;
+      guide.hidden = true;
+      countdown.hidden = true;
+      placeholder.hidden = false;
+      open.hidden = false;
+      take.hidden = true;
+      take.disabled = false;
+      retake.hidden = true;
+      analyze.hidden = true;
+      status.textContent = "카메라를 중지하고 이 화면의 촬영 사진을 지웠어요.";
+    });
     window.addEventListener("pagehide", () => {
       lifecycle.abort();
       window.clearInterval(timer);

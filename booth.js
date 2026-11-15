@@ -23,61 +23,223 @@
     return /^#[0-9a-f]{6}$/i.test(value || "") ? value : null;
   }
 
+  const stringList = (value) => Array.isArray(value) ? value.filter((item) => typeof item === "string" && item.trim()) : [];
+  const contentFor = (result) => result.content && typeof result.content === "object" && !Array.isArray(result.content) ? result.content : null;
+  const validScore = (value) => typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 1;
+
+  function recommendationsFor(result) {
+    const supplied = contentFor(result)?.makeup;
+    const items = Array.isArray(supplied) && supplied.length ? supplied : result.recommendations || [];
+    return items.filter((item) => item && labels[item.category] && hex(item.hex || item.color))
+      .map((item) => ({ ...item, color: item.hex || item.color }));
+  }
+
+  function paletteFor(result) {
+    const supplied = contentFor(result)?.palette;
+    const items = Array.isArray(supplied) && supplied.length ? supplied : result.palette || [];
+    return items.map((item) => typeof item === "string" ? { hex: item } : item)
+      .filter((item) => item && hex(item.hex));
+  }
+
+  function sectionTitle(title, caption) {
+    const heading = node("div", "", "result-section-title");
+    heading.append(node("h2", title));
+    if (caption) heading.append(node("span", caption));
+    return heading;
+  }
+
   function paletteSection(colors) {
     const section = node("section");
     const palette = node("ul", "", "palette");
+    palette.style.setProperty("--palette-count", Math.min(6, Math.max(1, colors.length)));
     for (const color of colors) {
-      if (!hex(color)) continue;
       const item = node("li", "", "swatch-chip");
       const swatch = node("span");
-      swatch.style.setProperty("--swatch", color);
+      swatch.style.setProperty("--swatch", color.hex);
       swatch.setAttribute("aria-hidden", "true");
-      item.append(swatch, document.createTextNode(color));
+      item.append(swatch);
+      if (color.name) item.append(node("strong", color.name));
+      item.append(document.createTextNode(color.hex));
       palette.append(item);
     }
-    const heading = node("div", "", "result-section-title");
-    heading.append(node("h2", "나를 빛내는 컬러 팔레트"), node("span", "Your signature shades"));
-    section.append(heading, palette);
+    section.append(sectionTitle("나를 빛내는 컬러 팔레트", "Your signature shades"), palette);
     return section;
   }
 
   function renderResult(container, result, actions) {
+    const content = contentFor(result);
+    const palette = paletteFor(result);
     const tone = node("div", "", "tone");
     const copy = node("div", "", "tone-copy");
-    copy.append(node("span", "MY PERSONAL COLOR"), node("strong", result.season_ko), node("p", seasonNames[result.season] || "Personal Color", "serif tone-english"));
+    copy.append(node("span", "MY PERSONAL COLOR"), node("strong", content?.season_ko || result.season_ko), node("p", seasonNames[result.season] || "Personal Color", "serif tone-english"));
     const art = node("div", "", "tone-art");
     art.setAttribute("aria-hidden", "true");
-    const colors = (result.palette || []).filter(hex).slice(0, 4);
+    const colors = palette.slice(0, 4);
     colors.forEach((color, index) => {
       const swatch = node("span");
-      swatch.style.setProperty("--swatch", color);
+      swatch.style.setProperty("--swatch", color.hex);
       swatch.style.setProperty("--angle", (index - (colors.length - 1) / 2) * 22 + "deg");
       art.append(swatch);
     });
     tone.append(copy, art);
+    const sections = [tone];
+    if (content?.summary) sections.push(node("p", content.summary, "result-summary"));
+    const keywords = stringList(content?.keywords);
+    if (keywords.length) {
+      const tags = node("ul", "", "result-keywords");
+      tags.setAttribute("aria-label", "나의 컬러 키워드");
+      keywords.forEach((keyword) => tags.append(node("li", keyword)));
+      sections.push(tags);
+    }
+
+    const warnings = stringList(result.warning_messages);
+    const reliabilityLabels = { high: "분석 조건 좋음", medium: "분석 조건 참고 필요", low: "재촬영·진단천 비교 권장" };
+    if (reliabilityLabels[result.reliability] || warnings.length) {
+      const notice = node("section", "", warnings.length || result.reliability === "low" ? "notice result-quality" : "quality-note result-quality");
+      notice.setAttribute("aria-label", "촬영 및 분석 조건 안내");
+      if (reliabilityLabels[result.reliability]) notice.append(node("strong", reliabilityLabels[result.reliability]));
+      if (warnings.length) {
+        const list = node("ul");
+        warnings.forEach((warning) => list.append(node("li", warning)));
+        notice.append(list);
+      }
+      sections.push(notice);
+    }
+
+    const scores = Object.entries(result.season_scores || {})
+      .filter(([season, score]) => seasonNames[season] && validScore(score)).sort((a, b) => b[1] - a[1]);
+    if (scores.length) {
+      const section = node("section", "", "score-section");
+      const list = node("ul", "", "season-scores");
+      for (const [season, score] of scores) {
+        const row = node("li");
+        const caption = node("div");
+        caption.append(node("span", { spring: "봄 웜톤", summer: "여름 쿨톤", autumn: "가을 웜톤", winter: "겨울 쿨톤" }[season]), node("strong", Math.round(score * 100) + "점"));
+        const track = node("div", "", "score-track");
+        track.setAttribute("aria-hidden", "true");
+        const fill = node("span");
+        fill.style.width = (score * 100) + "%";
+        track.append(fill);
+        row.append(caption, track);
+        list.append(row);
+      }
+      section.append(sectionTitle("유형별 참고 점수"), list, node("p", "분류 기준으로 계산한 참고 점수이며, 진단 정확도나 확률을 뜻하지 않아요.", "hint score-note"));
+      sections.push(section);
+    }
+    const reasons = stringList(result.reasons);
+    if (reasons.length) {
+      const section = node("section", "", "result-reasons");
+      const list = node("ul");
+      reasons.forEach((reason) => list.append(node("li", reason)));
+      section.append(sectionTitle("이렇게 추천했어요"), list);
+      sections.push(section);
+    }
+    sections.push(paletteSection(palette));
+    if (actions) sections.push(actions);
+
     const style = node("section", "", "stack style-section");
     const ideas = node("dl", "", "style-grid");
-    const recommendations = Object.entries(styleIdeas[result.season] || {});
-    for (const item of result.recommendations || []) {
-      recommendations.push([labels[item.category] || item.category, item.name]);
-    }
+    const recommendations = content ? [
+      ["어울리는 옷 색", stringList(content.clothes?.best).join(", ")],
+      ["비교해 볼 옷 색", stringList(content.clothes?.avoid).join(", ")],
+      ["머리색", stringList(content.hair).join(", ")],
+      ["액세서리", [content.accessory?.metal_ko, content.accessory?.tip].filter((text) => typeof text === "string" && text).join(" · ")],
+    ] : Object.entries(styleIdeas[result.season] || {});
+    recommendationsFor(result).forEach((item) => recommendations.push([labels[item.category], item.name]));
     for (const [label, suggestion] of recommendations) {
+      if (!suggestion) continue;
       const entry = node("div");
       entry.append(node("dt", label), node("dd", suggestion));
       ideas.append(entry);
     }
-    const styleHeading = node("div", "", "result-section-title");
-    styleHeading.append(node("h2", "나답게 완성하는 스타일"), node("span", "The finishing touches"));
-    style.append(styleHeading, ideas);
-
-    container.replaceChildren(
-      tone,
-      paletteSection(result.palette || []),
-      ...(actions ? [actions] : []),
-      style,
-      node("p", result.disclaimer, "hint"),
-    );
+    style.append(sectionTitle("나답게 완성하는 스타일", "The finishing touches"), ideas);
+    sections.push(style);
+    if (content?.booth_lip) {
+      const product = node("section", "", "booth-lip-note");
+      product.append(node("strong", "현장에서 만나볼 추천 립"), node("p", content.booth_lip));
+      sections.push(product);
+    }
+    if (content?.second_season?.season_ko) {
+      sections.push(node("p", "진단천으로 함께 비교해 보세요 · " + content.second_season.season_ko, "hint"));
+    }
+    sections.push(node("p", result.disclaimer || "조명과 카메라에 따라 결과가 달라질 수 있는 체험용 추천이며 전문 진단을 대체하지 않습니다.", "hint"));
+    container.replaceChildren(...sections);
     container.hidden = false;
+  }
+
+  function setSessionActionsDisabled(disabled) {
+    document.querySelectorAll("[data-session-action]").forEach((button) => { button.disabled = disabled; });
+  }
+
+  function initSessionEnd(id, demo, expiresAt) {
+    const section = byId("session-controls");
+    if (!section || section.dataset.ready) return;
+    section.dataset.ready = "true";
+    const actions = node("div", "", "actions");
+    const reset = node("button", "QR 유지하고 다음 참가자", "button secondary");
+    reset.type = "button";
+    reset.id = "reset-booth";
+    reset.dataset.sessionAction = "true";
+    const remove = node("button", "사진·결과 삭제하고 종료", "button danger-outline");
+    remove.type = "button";
+    remove.id = "delete-analysis";
+    remove.dataset.sessionAction = "true";
+    actions.append(reset, remove);
+    const note = node("p", "다음 참가자로 넘어가도 서버 데이터와 QR은 만료될 때까지 유지됩니다. 삭제 후에는 QR 결과도 열 수 없어요.", "hint");
+    const expiry = Date.parse(expiresAt || currentAnalysisExpiry());
+    const retention = node("p", demo ? "예시 모드에서는 서버에 저장된 참가자 데이터가 없어요." : Number.isFinite(expiry)
+      ? "서버 데이터 보관 만료 예정 · " + new Date(expiry).toLocaleString("ko-KR", { dateStyle: "short", timeStyle: "short" }) + " 이후 서버 정리 작업에서 삭제돼요. 즉시 삭제를 요청할 수도 있어요."
+      : "서버 보관 기간은 운영 설정을 따라요(기본 24시간). 즉시 삭제를 요청할 수도 있어요.", "hint");
+    section.append(node("h2", "체험을 마칠까요?"), note, retention, actions);
+    section.hidden = false;
+
+    const dialog = node("dialog", "", "delete-dialog");
+    dialog.id = "delete-dialog";
+    dialog.setAttribute("aria-labelledby", "delete-dialog-title");
+    dialog.setAttribute("aria-describedby", "delete-dialog-description");
+    const title = node("h2", "사진과 결과를 삭제할까요?");
+    title.id = "delete-dialog-title";
+    const description = node("p", demo ? "예시 화면을 종료하고 처음으로 돌아갑니다. 서버로 삭제 요청을 보내지 않아요."
+      : "부스 서버에 저장된 원본 사진·분석·가상 메이크업 결과와 QR 공유 링크를 함께 삭제합니다. 이미 내려받은 파일과 외부 서비스 보관 데이터에는 적용되지 않아요.");
+    description.id = "delete-dialog-description";
+    const error = node("p", "", "error");
+    error.id = "delete-error";
+    error.setAttribute("role", "alert");
+    error.hidden = true;
+    const controls = node("div", "", "actions");
+    const cancel = node("button", "취소", "button secondary");
+    const confirm = node("button", "삭제하고 종료", "button primary");
+    cancel.type = confirm.type = "button";
+    confirm.id = "confirm-delete";
+    controls.append(cancel, confirm);
+    dialog.append(title, description, error, controls);
+    document.body.append(dialog);
+    let deleting = false;
+    const finish = () => {
+      clearAnalysis();
+      location.replace("1.html");
+    };
+    reset.addEventListener("click", finish);
+    remove.addEventListener("click", () => { showError(error); dialog.showModal(); });
+    cancel.addEventListener("click", () => { if (!deleting) dialog.close(); });
+    dialog.addEventListener("cancel", (event) => { if (deleting) event.preventDefault(); });
+    confirm.addEventListener("click", async () => {
+      if (deleting) return;
+      deleting = true;
+      confirm.disabled = cancel.disabled = true;
+      confirm.textContent = "삭제 요청 중…";
+      showError(error);
+      try {
+        if (!demo) await api(analysisPath(id), { method: "DELETE" });
+        finish();
+      } catch (cause) {
+        if (cause.status === 404) { finish(); return; }
+        showError(error, "삭제를 완료하지 못했어요. 결과를 유지하고 있으니 연결을 확인한 뒤 다시 시도해 주세요.");
+        deleting = false;
+        confirm.disabled = cancel.disabled = false;
+        confirm.textContent = "다시 삭제 요청";
+      }
+    });
   }
 
   function renderProducts(list, products) {
@@ -126,7 +288,7 @@
     const before = byId("before-photo");
     const after = byId("after-photo");
 
-    const colors = (result.recommendations || []).filter((item) => labels[item.category] && hex(item.color));
+    const colors = recommendationsFor(result);
     colorGroup.replaceChildren(...colors.map((item) => {
       const label = node("label", labels[item.category] + " · " + item.name);
       const input = node("input");
@@ -137,6 +299,7 @@
       return label;
     }));
 
+    byId("makeup-consent-section").hidden = demo;
     if (demo) {
       byId("provider-note").textContent = "테스트용 일러스트에서 색상과 비교 슬라이더를 확인할 수 있어요.";
       renderProducts(byId("product-list"), demoResult.products);
@@ -173,7 +336,13 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (button.disabled) return;
+      if (!demo && !byId("makeup-consent").checked) {
+        showError(error, "가상 메이크업 처리와 외부 전송 안내를 확인하고 동의 항목을 체크해 주세요.");
+        byId("makeup-consent").focus();
+        return;
+      }
       button.disabled = true;
+      setSessionActionsDisabled(true);
       comparison.hidden = true;
       byId("makeup-placeholder").hidden = false;
       showError(error);
@@ -215,6 +384,7 @@
         showError(error, cause.message);
       } finally {
         button.disabled = false;
+        setSessionActionsDisabled(false);
       }
     });
   }
@@ -237,11 +407,17 @@
         const analysis = demo ? { status: "completed", result: demoResult } : await api(analysisPath(id));
         if (analysis.status !== "completed" || !analysis.result) throw new Error("완료된 분석 결과가 없어요.");
         renderResult(byId("result-content"), analysis.result, byId("result-actions"));
-        setUpMakeup(id, analysis.result, demo);
+        if (!byId("makeup-form").dataset.ready) {
+          setUpMakeup(id, analysis.result, demo);
+          byId("makeup-form").dataset.ready = "true";
+        }
+        initSessionEnd(id, demo, analysis.expires_at);
+        byId("result-title").replaceChildren(document.createTextNode("당신의 색을 "), node("em", "발견했어요."));
         byId("result-actions").hidden = false;
         byId("experiences").hidden = false;
         byId("result-title").focus();
       } catch (error) {
+        byId("result-title").textContent = "결과를 확인하지 못했어요.";
         byId("result-error-text").textContent = error.message;
         byId("result-error").hidden = false;
         retry.hidden = error.status === 404;
@@ -289,11 +465,10 @@
     const ready = byId("share-ready");
     const open = byId("open-card");
     const copy = byId("copy-card");
+    initSessionEnd(id, demo);
     if (demo) {
       markDemo(byId("share-title"));
       byId("back-to-results").href = "3.html?demo=1";
-    } else {
-      byId("reset-note").hidden = false;
     }
 
     async function issueLink() {
@@ -359,10 +534,6 @@
       }
     });
     retry.addEventListener("click", issueLink);
-    byId("reset-booth").addEventListener("click", () => {
-      clearAnalysis();
-      location.replace("1.html");
-    });
     issueLink();
   }
 

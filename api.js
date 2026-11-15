@@ -41,7 +41,7 @@ const boothApi = (() => {
     let data;
     try {
       response = await fetch(url, { ...options, signal: request.signal, cache: "no-store" });
-      data = await response.json().catch((error) => {
+      data = response.status === 204 ? null : await response.json().catch((error) => {
         if (request.signal.aborted) throw error;
         return null;
       });
@@ -54,7 +54,7 @@ const boothApi = (() => {
       signal?.removeEventListener("abort", abort);
     }
 
-    if (response.ok && data !== null) return data;
+    if (response.ok && (response.status === 204 || data !== null)) return data;
 
     const messages = {
       404: "결과가 없거나 보관 시간이 끝났어요.",
