@@ -98,7 +98,7 @@ const boothDemo = (() => {
       { category: "blush", name: "라벤더 핑크", color: "#D9A0BB" },
       { category: "eye", name: "소프트 모브", color: "#9A7F9D" },
     ],
-    products: [{ category: "lip", name: "예시 립 테스터", color_hex: "#C85A7C", tester_label: "테스트용" }],
+    products: [{ id: "romand-figfig", category: "lip", brand: "rom&nd", name: "피그피그", color_hex: "#A65B70", tester_label: "테스트용" }],
     disclaimer: "화면 동작을 확인하기 위한 예시이며 실제 분석 결과가 아니에요.",
   };
 

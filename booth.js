@@ -5,6 +5,27 @@
 
   const labels = { lip: "립", blush: "블러셔", eye: "아이" };
   const seasonNames = { spring: "Spring Warm", summer: "Summer Cool", autumn: "Autumn Warm", winter: "Winter Cool" };
+  const boothLipSpecs = [
+    { id: "romand-bare-apricot", name: "베어 애프리콧", season: "spring" },
+    { id: "romand-figfig", name: "피그피그", season: "summer" },
+    { id: "romand-acorn-brown", name: "도토리 밤", season: "autumn" },
+    { id: "romand-plum-coke", name: "플럼 콕", season: "winter" },
+  ];
+  const compact = (value) => typeof value === "string" ? value.normalize("NFKC").toLowerCase().replace(/[^a-z가-힣0-9]/g, "") : "";
+  function boothLipSpec(product) {
+    if (!product || product.category !== "lip" || product.active === false || !hex(product.color_hex)) return null;
+    const brand = compact(product.brand);
+    return boothLipSpecs.find((spec) => product.id === spec.id || (["롬앤", "romnd", "romand"].includes(brand) && compact(product.name).includes(compact(spec.name)))) || null;
+  }
+  function boothLips(products) {
+    const seen = new Set();
+    return (Array.isArray(products) ? products : []).filter((product) => {
+      const spec = boothLipSpec(product);
+      if (!spec || seen.has(spec.id)) return false;
+      seen.add(spec.id);
+      return true;
+    });
+  }
   const styleIdeas = {
     spring: { "옷": "피치, 크림 아이보리, 연두", "머리색": "허니 브라운, 골든 브라운", "액세서리": "옐로 골드, 로즈 골드" },
     summer: { "옷": "라벤더, 더스티 로즈, 소프트 블루", "머리색": "애쉬 브라운, 코코아 브라운", "액세서리": "실버, 화이트 골드" },
@@ -290,7 +311,8 @@
 
     const colors = recommendationsFor(result);
     colorGroup.replaceChildren(...colors.map((item) => {
-      const label = node("label", labels[item.category] + " · " + item.name);
+      const label = node("label");
+      label.append(node("span", labels[item.category] + " · " + item.name, "color-label"));
       const input = node("input");
       input.type = "color";
       input.name = item.category + "_color";
@@ -299,10 +321,23 @@
       return label;
     }));
 
+    const lipInput = form.querySelector('[name="lip_color"]');
+    let lipTouched = false;
+    let lipLoading = false;
+    lipInput?.addEventListener("input", () => { lipTouched = true; });
+    function applyInitialLip(products) {
+      const product = boothLips(products).find((item) => boothLipSpec(item).season === result.season);
+      if (product && lipInput && !lipTouched) {
+        lipInput.value = product.color_hex;
+        lipInput.closest("label").querySelector(".color-label").textContent = "립 · " + product.name;
+      }
+      return Boolean(product);
+    }
     byId("makeup-consent-section").hidden = demo;
     if (demo) {
       byId("provider-note").textContent = "테스트용 일러스트에서 색상과 비교 슬라이더를 확인할 수 있어요.";
       renderProducts(byId("product-list"), demoResult.products);
+      applyInitialLip(demoResult.products);
     } else {
       const loadDetails = async () => {
         if (!details.open || details.dataset.loaded) return;
@@ -310,19 +345,26 @@
         const note = byId("provider-note");
         const productStatus = byId("product-status");
         note.textContent = "가상 메이크업에 외부 서비스를 쓰는 경우 촬영 사진이 전송돼요.";
-        productStatus.textContent = "추천 테스터를 불러오는 중이에요.";
+        productStatus.textContent = "추천 테스터와 립 초기 색상을 불러오는 중이에요.";
+        lipLoading = true;
 
         const provider = api("/health").then((health) => {
           note.textContent = health.vto_provider === "perfectcorp"
             ? "가상 메이크업을 적용하면 촬영 사진을 YouCam 서버로 보내요."
             : "부스 컴퓨터에서 데모 메이크업을 합성해요.";
         }).catch(() => {});
-        const products = api(analysisPath(id) + "/products").then((items) => {
+        const products = (async () => {
+          const [recommended, catalog] = await Promise.allSettled([
+            api(analysisPath(id) + "/products"), api("/api/v1/products?category=lip"),
+          ]);
+          const items = recommended.status === "fulfilled" && Array.isArray(recommended.value) ? recommended.value : [];
+          const allItems = catalog.status === "fulfilled" && Array.isArray(catalog.value) ? catalog.value : [];
           renderProducts(byId("product-list"), items);
-          productStatus.textContent = items.length ? "" : "운영자에게 사용할 수 있는 테스터를 문의해 주세요.";
-        }).catch(() => {
-          productStatus.textContent = "테스터 정보를 불러오지 못했어요. 운영자에게 문의해 주세요.";
-        });
+          const initialized = applyInitialLip(items) || applyInitialLip(allItems);
+          productStatus.textContent = initialized
+            ? items.length ? "" : "추천 테스터 정보를 불러오지 못했어요. 운영자에게 문의해 주세요."
+            : "계절에 맞는 롬앤 립 초기 색상을 불러오지 못했어요. 립 색상을 직접 선택하거나 새로고침해 주세요.";
+        })().finally(() => { lipLoading = false; });
         await Promise.allSettled([provider, products]);
       };
       details.addEventListener("toggle", loadDetails);
@@ -336,6 +378,10 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (button.disabled) return;
+      if (lipLoading) {
+        showError(error, "립 초기 색상을 불러오는 중이에요. 잠시 뒤 다시 적용해 주세요.");
+        return;
+      }
       if (!demo && !byId("makeup-consent").checked) {
         showError(error, "가상 메이크업 처리와 외부 전송 안내를 확인하고 동의 항목을 체크해 주세요.");
         byId("makeup-consent").focus();

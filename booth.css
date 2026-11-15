@@ -448,6 +448,9 @@ body[data-mode="public"] .header-right { display: none; }
 .delete-dialog h2 { font-size: 23px; margin-bottom: 16px; }
 .delete-dialog > p { font-size: 13px; color: #7b6578; line-height: 1.9; margin-bottom: 22px; }
 .delete-dialog .actions { justify-content: end; }
+.camera-actions #choose-photo { flex-grow: 1; }
+.camera-actions #open-camera { flex-grow: 0; }
+#photo-source:empty { display: none; }
 @media (max-width: 650px) {
   .swatch-chip strong { font-size: 9px; }
   .season-scores { grid-template-columns: 1fr; }

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#f9f9ff">
-  <title>얼굴 촬영 | 무채색에서 살아남기</title>
+  <title>사진 촬영·선택 | 무채색에서 살아남기</title>
   <link rel="stylesheet" href="booth.css">
   <script defer src="api.js"></script><script defer src="capture.js"></script><script defer src="demo.js"></script><script defer src="booth.js"></script>
 </head>
@@ -19,7 +19,7 @@
 </header>
 <nav class="wrap step-nav" aria-label="체험 진행 단계"><ol class="steps"><li><span class="step-number">01</span><span>시작<small>Start</small></span></li><li aria-current="step"><span class="step-number">02</span><span>촬영<small>Capture</small></span></li><li><span class="step-number">03</span><span>결과<small>Discover</small></span></li><li><span class="step-number">04</span><span>QR 카드<small>Keep</small></span></li></ol></nav>
 <main class="wrap stack page-main" id="main">
-  <div class="page-heading"><p class="eyebrow">THE FIRST IMPRESSION</p><h1 id="capture-title">가장 자연스러운,<br><em>지금의 나를 담아요.</em></h1><p class="lede">정면을 보고, 얼굴을 가이드 안에 맞춰 주세요.</p></div>
+  <div class="page-heading"><p class="eyebrow">THE FIRST IMPRESSION</p><h1 id="capture-title">가장 자연스러운,<br><em>지금의 나를 담아요.</em></h1><p class="lede">기존 셀카를 선택하거나, 정면을 보고 카메라로 촬영해 주세요.</p></div>
   <aside class="test-tools preview-navigation" aria-label="임시 화면 이동">
     <div><strong>디자인 미리보기</strong><p>촬영 없이 다음 화면으로 이동해요. 예시 결과가 표시됩니다.</p></div>
     <div class="actions">
@@ -31,23 +31,24 @@
     <section class="camera-card card stack" aria-labelledby="capture-title">
       <div class="panel-heading"><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l2-3h4l2 3h4v14H4V6z"/><circle cx="12" cy="12" r="4"/></svg> PHOTO BOOTH</span><span class="pill">STEP 02</span></div>
       <section class="consent-panel stack" aria-labelledby="consent-title">
-        <h2 id="consent-title">촬영 전, 확인해 주세요</h2>
+        <h2 id="consent-title">사진을 사용하기 전, 확인해 주세요</h2>
         <p>운영자에게 개인정보 수집·이용 안내를 받고 서면 동의 후 체크해 주세요. 얼굴 사진은 퍼스널컬러 분석에 사용돼요.</p>
         <p>사진·결과는 서버 설정에 따라 보관돼요(기본 24시간). 결과 화면의 보관 만료 예정 시각 이후 서버 정리 작업에서 삭제되며, 즉시 삭제도 요청할 수 있어요.</p>
-        <label class="consent-choice" for="photo-consent"><input id="photo-consent" type="checkbox"><span>안내를 확인했고, 얼굴 사진 촬영·분석에 동의합니다.</span></label>
+        <label class="consent-choice" for="photo-consent"><input id="photo-consent" type="checkbox"><span>안내를 확인했고, 얼굴 사진 촬영·업로드 및 분석에 동의합니다.</span></label>
         <p class="hint">동의하지 않으면 촬영 없이 운영자와 진단천 체험을 즐길 수 있어요. 가상 메이크업의 외부 전송은 결과 화면에서 별도로 확인해요.</p>
       </section>
       <div class="camera-frame">
         <video id="camera-video" autoplay muted playsinline hidden></video>
         <img id="captured-photo" alt="촬영한 얼굴 사진" hidden>
         <div id="camera-guide" class="camera-guide" aria-hidden="true" hidden></div>
-        <div id="camera-placeholder" class="camera-placeholder"><div class="placeholder-oval"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l2-3h4l2 3h4v14H4V6z"/><circle cx="12" cy="12" r="4"/></svg></div><strong>조금 더 나다운 한 장</strong><p>카메라를 켜고 얼굴을 가이드에 맞춰 주세요.</p></div>
+        <div id="camera-placeholder" class="camera-placeholder"><div class="placeholder-oval"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l2-3h4l2 3h4v14H4V6z"/><circle cx="12" cy="12" r="4"/></svg></div><strong>조금 더 나다운 한 장</strong><p>기존 사진을 선택하거나 카메라로 촬영해 주세요.</p></div>
         <span class="frame-corner top-left" aria-hidden="true"></span><span class="frame-corner bottom-right" aria-hidden="true"></span>
         <span id="countdown" class="countdown" aria-hidden="true" hidden></span>
       </div>
+      <p id="photo-source" class="hint" role="status"></p>
       <p id="capture-status" class="status" role="status" aria-live="polite"></p><p id="capture-error" class="error" role="alert" hidden></p>
-      <div class="actions camera-actions"><button class="button primary" type="button" id="open-camera"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l2-3h4l2 3h4v14H4V6z"/><circle cx="12" cy="12" r="4"/></svg> 카메라 켜기</button><button class="button primary" type="button" id="take-photo" hidden>3초 뒤 촬영</button><button class="button primary" type="button" id="analyze-photo" hidden>이 사진으로 분석 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button><button class="button secondary" type="button" id="retake-photo" hidden>다시 찍기</button><a class="button plain" href="1.html">처음으로</a></div>
-      <p class="hint camera-bottom-note">촬영 후 사진을 확인하고 다시 찍을 수 있어요.</p>
+      <div class="actions camera-actions"><input type="file" id="photo-file" accept="image/jpeg,image/png,.jpg,.jpeg,.png" hidden><button class="button primary" type="button" id="choose-photo">기존 사진 선택</button><button class="button secondary" type="button" id="open-camera"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l2-3h4l2 3h4v14H4V6z"/><circle cx="12" cy="12" r="4"/></svg> 카메라 켜기</button><button class="button primary" type="button" id="take-photo" hidden>3초 뒤 촬영</button><button class="button primary" type="button" id="analyze-photo" hidden>이 사진으로 분석 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button><button class="button secondary" type="button" id="retake-photo" hidden>다시 찍기</button><a class="button plain" href="1.html">처음으로</a></div>
+      <p class="hint camera-bottom-note">JPG·PNG, 최대 10MB · 선택 후 사진을 확인하고 분석해요. HEIC는 JPG로 변환해 주세요.</p>
     </section>
     <aside class="capture-sidebar stack">
       <section class="card tips-card stack"><p class="eyebrow">A BETTER COLOR MATCH</p><h2>작은 준비로,<br>더 자연스러운 컬러.</h2><ol class="feature-list"><li><span>01</span><div><strong>빛을 골고루 받아요</strong><p>얼굴에 짙은 그림자가 생기지 않도록 해주세요.</p></div></li><li><span>02</span><div><strong>얼굴 전체가 보이게</strong><p>마스크나 얼굴을 가리는 머리카락을 정리해 주세요.</p></div></li><li><span>03</span><div><strong>필터 없이, 정면으로</strong><p>보정 없이 카메라를 편안하게 바라봐 주세요.</p></div></li></ol></section>

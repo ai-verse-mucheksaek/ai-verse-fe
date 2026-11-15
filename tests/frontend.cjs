@@ -29,6 +29,13 @@ const fixture = {
     second_season:{season:'spring',season_ko:'봄 웜톤',score:0.25},
   },
 };
+const lipCatalog = [
+ {id:'romand-bare-apricot',brand:'rom&nd',name:'베어 애프리콧',category:'lip',color_hex:'#D98C73',seasons:['spring'],tester_label:'봄 웜톤 추천'},
+ {id:'romand-figfig',brand:'rom&nd',name:'피그피그',category:'lip',color_hex:'#A65B70',seasons:['summer'],tester_label:'여름 쿨톤 추천'},
+ {id:'romand-acorn-brown',brand:'rom&nd',name:'도토리 밤',category:'lip',color_hex:'#8F4E3B',seasons:['autumn'],tester_label:'가을 웜톤 추천'},
+ {id:'romand-plum-coke',brand:'rom&nd',name:'플럼 콕',category:'lip',color_hex:'#802D50',seasons:['winter'],tester_label:'겨울 쿨톤 추천'},
+];
+const oldTester = {id:'lip-summer-01',brand:'부스 테스터',name:'예전 예시 로즈 립',category:'lip',color_hex:'#C85A7C',seasons:['summer']};
 const picture='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450"><rect width="600" height="450" fill="#eadbea"/><ellipse cx="300" cy="210" rx="100" ry="140" fill="#f0c1aa"/></svg>';
 (async()=>{
  fs.mkdirSync(output,{recursive:true});
@@ -53,7 +60,7 @@ const picture='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
   const errors=[];
   page.on('pageerror',error=>errors.push(error.message));
   let state;
-  const fresh=()=>state={result:structuredClone(fixture),deleteStatus:204,deleted:false,calls:[],failAnalysis:false};
+  const fresh=()=>state={result:structuredClone(fixture),deleteStatus:204,deleted:false,calls:[],failAnalysis:false,catalogFails:false,expectedLip:'#a65b70'};
   fresh();
   await page.route('**/health',route=>{
    state.calls.push({method:'GET',path:'/health'});
@@ -68,17 +75,20 @@ const picture='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
     return route.fulfill(state.deleteStatus===204?{status:204,body:''}:{status:state.deleteStatus,json:{detail:'삭제 오류'}});
    }
    if(url.pathname.endsWith('/image'))return route.fulfill({contentType:'image/svg+xml',body:picture});
-   if(url.pathname.endsWith('/products'))return route.fulfill({json:[{brand:'rom&nd',name:'피그피그',category:'lip',color_hex:'#A65B70',tester_label:'여름 쿨톤 추천'}]});
+   if(url.pathname==='/api/v1/products')return route.fulfill(state.catalogFails?{status:500,json:{detail:'제품 오류'}}:{json:[oldTester,...lipCatalog,{...lipCatalog[0],id:'inactive',active:false}]});
+   if(url.pathname.endsWith('/products'))return route.fulfill({json:[oldTester,lipCatalog.find(product=>product.seasons.includes(state.result.season))||lipCatalog[1]]});
    if(url.pathname.endsWith('/share'))return route.fulfill({status:201,json:{token:'test-share-token-abcdefghijk',expires_at:new Date(Date.now()+1800000).toISOString()}});
    if(url.pathname==='/api/v1/try-ons'){
     assert.equal(request.postDataJSON().analysis_id,'analysis-under-test');
-    assert.equal(request.postDataJSON().lip_color,'#c85a7c');
+    assert.equal(request.postDataJSON().lip_color,state.expectedLip);
+    assert.equal(request.postDataJSON().blush_color,'#d9a0bb');
+    assert.equal(request.postDataJSON().eye_color,'#9a7f9d');
     return route.fulfill({status:201,json:{status:'completed',provider:'perfectcorp',before_image_url:'/api/v1/analyses/analysis-under-test/image',result_image_url:'/api/v1/try-ons/example/image'}});
    }
    if(state.deleted)return route.fulfill({status:404,json:{detail:'결과가 없습니다.'}});
    if(url.pathname.includes('/public/results/')){
     const {season_scores,...publicResult}=state.result;
-    return route.fulfill({json:{...publicResult,products:[]}});
+    return route.fulfill({json:{...publicResult,products:[oldTester,lipCatalog[1]]}});
    }
    if(state.failAnalysis)return route.fulfill({status:500,json:{detail:'오류'}});
    return route.fulfill({status:request.method()==='POST'?201:200,json:{id:'analysis-under-test',status:'completed',expires_at:new Date(Date.now()+86400000).toISOString(),result:state.result}});
@@ -130,12 +140,13 @@ const picture='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
   assert.match(upload,/name="consent"\r\n\r\ntrue/);
   assert.match(upload,/name="image"; filename="capture.jpg"/);
   const resultText=await page.locator('#result-content').textContent();
-  for(const text of ['서버에서 전달한 맞춤 스타일 요약','서버 추천 머리색','서버 추천 옷 색','서버 비교 옷 색','서버 추천 액세서리 안내','롬앤 피그피그','기준 카드가 보이지 않아','백엔드 분석 근거','62점','재촬영·진단천 비교 권장'])assert(resultText.includes(text),text);
+  for(const text of ['서버에서 전달한 맞춤 스타일 요약','서버 추천 머리색','서버 추천 옷 색','서버 비교 옷 색','서버 추천 액세서리 안내','피그피그','기준 카드가 보이지 않아','백엔드 분석 근거','62점','재촬영·진단천 비교 권장'])assert(resultText.includes(text),text);
   assert.equal(await page.locator('.palette li').count(),6);
   assert.equal(await page.locator('.season-scores li').count(),4);
   assert.match(await page.locator('#session-controls').textContent(),/보관 만료 예정/);
   record('촬영 업로드와 v2 추천·점수·근거·경고·보관 시각 표시');
 
+  await page.waitForFunction(()=>document.querySelector('[name="lip_color"]')?.value==='#a65b70');
   await page.locator('#apply-makeup').click();
   assert.match(await page.locator('#makeup-error').textContent(),/동의/);
   assert.equal(calls('POST','/try-ons').length,0);
@@ -225,11 +236,91 @@ const picture='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
   assert.equal(await page.locator('.result-summary').textContent(),'<img src=x onerror=alert(1)>');
   record('서버 문구는 HTML 실행 없이 텍스트로 표시');
 
+
+  for(const product of lipCatalog){
+   fresh();state.result.season=product.seasons[0];await session();
+   await page.waitForFunction(color=>document.querySelector('[name="lip_color"]')?.value===color,product.color_hex.toLowerCase());
+   assert.match(await page.locator('[name="lip_color"]').locator('..').textContent(),new RegExp(product.name));
+   assert.equal(await page.locator('[name="blush_color"]').inputValue(),'#d9a0bb');
+   assert.equal(await page.locator('[name="eye_color"]').inputValue(),'#9a7f9d');
+   assert.equal(await page.locator('#lip-products').count(),0);
+   assert.equal(await page.locator('#makeup-intensity').inputValue(),'55');
+   assert.equal(await page.locator('#makeup-intensity').getAttribute('max'),'100');
+   assert.equal(calls('POST','/try-ons').length,0);
+   state.expectedLip=product.color_hex.toLowerCase();
+   await page.locator('#makeup-consent').check();
+   await page.locator('#apply-makeup').click();
+   await page.locator('#comparison').waitFor({state:'visible'});
+  }
+  record('계절별 롬앤 립 초기값과 해당 HEX 전송, 블러셔·아이·강도 기존값 유지');
+
+  fresh();await page.goto(base+'2.html');
+  const pngBuffer=Buffer.from(await page.evaluate(()=>{
+   const canvas=document.createElement('canvas');canvas.width=3200;canvas.height=2400;
+   const ctx=canvas.getContext('2d');ctx.fillStyle='#e8b5a1';ctx.fillRect(0,0,canvas.width,canvas.height);
+   return canvas.toDataURL('image/png').split(',')[1];
+  }),'base64');
+  const photoFile={name:'selfie.png',mimeType:'image/png',buffer:pngBuffer};
+  await page.locator('#photo-file').setInputFiles(photoFile);
+  assert.match(await page.locator('#capture-error').textContent(),/동의/);
+  assert.equal(calls('POST').length,0);
+  await page.locator('#photo-consent').check();
+  await page.locator('#photo-file').setInputFiles(photoFile);
+  await page.locator('#analyze-photo').waitFor({state:'visible'});
+  await page.waitForFunction(()=>!document.querySelector('#analyze-photo').disabled);
+  await page.locator('#captured-photo').evaluate(image=>image.decode());
+  assert.equal(await page.locator('#captured-photo').evaluate(image=>image.naturalWidth),1600);
+  assert.equal(await page.evaluate(()=>window.__cameraRequests),0);
+  assert.equal(calls('POST').length,0);
+  assert.match(await page.locator('#photo-source').textContent(),/기존 사진/);
+  await page.locator('#analyze-photo').click();
+  await page.waitForURL('**/3.html');
+  const uploadedPhoto=calls('POST','/analyses')[0].body.toString();
+  assert.match(uploadedPhoto,/filename="upload.jpg"/);
+  assert.match(uploadedPhoto,/Content-Type: image\/jpeg/);
+  record('기존 PNG 셀카 → 1600px JPEG 정규화 → 미리보기 → 웹캠 없이 분석 요청');
+
+  fresh();await page.goto(base+'2.html');
+  await page.locator('#photo-consent').check();
+  for(const invalid of [
+   {name:'photo.heic',mimeType:'image/heic',buffer:Buffer.from('invalid')},
+   {name:'too-large.jpg',mimeType:'image/jpeg',buffer:Buffer.alloc(10*1024*1024+1)},
+   {name:'damaged.png',mimeType:'image/png',buffer:Buffer.from('not an image')},
+  ]){
+   await page.locator('#photo-file').setInputFiles(invalid);
+   await page.locator('#capture-error').waitFor({state:'visible'});
+   assert(await page.locator('#analyze-photo').isHidden());
+   assert.equal(calls('POST').length,0);
+  }
+  await page.locator('#photo-file').setInputFiles(photoFile);
+  await page.locator('#analyze-photo').waitFor({state:'visible'});
+  await page.waitForFunction(()=>!document.querySelector('#analyze-photo').disabled);
+  await page.locator('#photo-consent').uncheck();
+  assert(await page.locator('#captured-photo').isHidden());
+  assert(await page.locator('#analyze-photo').isHidden());
+  assert.equal(calls('POST').length,0);
+  record('HEIC·용량 초과·손상 파일 거부 및 업로드 후 동의 철회');
+
+  fresh();await page.goto(base+'2.html');
+  await page.locator('#photo-consent').check();
+  await page.locator('#open-camera').click();
+  await page.locator('#take-photo').waitFor({state:'visible'});
+  await page.locator('#take-photo').click();
+  await page.locator('#photo-file').setInputFiles(photoFile);
+  await page.locator('#analyze-photo').waitFor({state:'visible'});
+  await page.waitForFunction(()=>!document.querySelector('#analyze-photo').disabled);
+  assert(await page.evaluate(()=>window.__lastStream.getTracks().every(track=>track.readyState==='ended')));
+  await page.locator('#retake-photo').click();
+  await page.locator('#take-photo').waitFor({state:'visible'});
+  assert(await page.locator('#captured-photo').isHidden());
+  assert.equal(calls('POST').length,0);
+  record('카운트다운 중 업로드로 전환 시 웹캠 중지, 다시 카메라로 전환');
+
   fresh();
   for(const [file,name] of [['1.html','start'],['2.html','capture'],['3.html','results'],['4.html','share'],['4.html#result=test-share-token-abcdefghijk','public']]){
    for(const width of [1440,768,390,320]){
     await page.setViewportSize({width,height:1000});
-    if(file==='3.html'||file==='4.html')await session(file);else { if(name==='public')await page.goto(base+'1.html'); await page.goto(base+file); }
+    if(file==='3.html'||file==='4.html') { await session(file); if(file==='3.html')await page.waitForFunction(()=>document.querySelector('[name="lip_color"]')?.value==='#a65b70'); }else { if(name==='public')await page.goto(base+'1.html'); await page.goto(base+file); }
     if(name==='public')await page.locator('#public-content .tone').waitFor();
     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${name} ${width}: overflow`);
     if(width===390&&name==='results'){
