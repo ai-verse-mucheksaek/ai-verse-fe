@@ -3,7 +3,7 @@
   const { initCapture } = boothCapture;
   const { demoPortrait, demoResult } = boothDemo;
 
-  const labels = { lip: "립", blush: "블러셔", eye: "아이" };
+  const labels = { lip: "립", blush: "블러셔", eye: "아이섀도" };
   const seasonNames = { spring: "Spring Warm", summer: "Summer Cool", autumn: "Autumn Warm", winter: "Winter Cool" };
   const boothLipSpecs = [
     { id: "romand-bare-apricot", name: "베어 애프리콧", season: "spring" },
@@ -306,8 +306,11 @@
     const error = byId("makeup-error");
     const comparison = byId("comparison");
     const split = byId("comparison-slider");
+    const comparisonFrame = byId("comparison-frame");
+    const comparisonHandle = byId("comparison-handle");
     const before = byId("before-photo");
     const after = byId("after-photo");
+    const usage = boothUsage.init(id, { demo, onChange: (available) => { button.disabled = !available; } });
 
     const colors = recommendationsFor(result);
     colorGroup.replaceChildren(...colors.map((item) => {
@@ -379,12 +382,46 @@
       return intensity;
     }
     slider.addEventListener("input", readIntensity);
-    const updateSplit = () => byId("comparison-frame").style.setProperty("--split", split.value + "%");
+    const updateSplit = () => {
+      comparisonFrame.style.setProperty("--split", split.value + "%");
+      comparisonHandle.setAttribute("aria-label", "전후 비교 위치 " + split.value + "퍼센트, 좌우로 드래그해 조절");
+    };
+    const moveSplit = (clientX) => {
+      const bounds = comparisonFrame.getBoundingClientRect();
+      if (!bounds.width) return;
+      split.value = String(Math.round(Math.max(0, Math.min(100, (clientX - bounds.left) / bounds.width * 100))));
+      updateSplit();
+    };
+    let draggingSplit = false;
+    comparisonFrame.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      draggingSplit = true;
+      comparisonFrame.setPointerCapture(event.pointerId);
+      moveSplit(event.clientX);
+      event.preventDefault();
+    });
+    comparisonFrame.addEventListener("pointermove", (event) => {
+      if (draggingSplit) moveSplit(event.clientX);
+    });
+    comparisonFrame.addEventListener("pointerup", (event) => {
+      draggingSplit = false;
+      if (comparisonFrame.hasPointerCapture(event.pointerId)) comparisonFrame.releasePointerCapture(event.pointerId);
+    });
+    comparisonFrame.addEventListener("pointercancel", () => { draggingSplit = false; });
+    comparisonHandle.addEventListener("keydown", (event) => {
+      const step = event.shiftKey ? 10 : 1;
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      if (event.key === "Home") split.value = "0";
+      else if (event.key === "End") split.value = "100";
+      else split.value = String(Number(split.value) + (event.key === "ArrowRight" ? step : -step));
+      updateSplit();
+      event.preventDefault();
+    });
     split.addEventListener("input", updateSplit);
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      if (button.disabled) return;
+      if (button.disabled || !usage.canApply) return;
       if (lipLoading) {
         showError(error, "립 초기 색상을 불러오는 중이에요. 잠시 뒤 다시 적용해 주세요.");
         return;
@@ -394,7 +431,7 @@
         byId("makeup-consent").focus();
         return;
       }
-      button.disabled = true;
+      usage.setBusy(true);
       setSessionActionsDisabled(true);
       comparison.hidden = true;
       byId("makeup-placeholder").hidden = false;
@@ -411,6 +448,7 @@
           after.src = demoPortrait(request, request.intensity);
         } else {
           const image = await api("/api/v1/try-ons", {
+            useAdmin: true,
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(request),
@@ -436,7 +474,8 @@
         status.textContent = "";
         showError(error, cause.message);
       } finally {
-        button.disabled = false;
+        await usage.refresh();
+        usage.setBusy(false);
         setSessionActionsDisabled(false);
       }
     });

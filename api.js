@@ -6,6 +6,17 @@ const boothApi = (() => {
     : location.origin;
   const analysisKey = "ai-verse-analysis";
   const analysisExpiryKey = "ai-verse-analysis-expiry";
+  let adminToken = "";
+  const canUseAdmin = () => location.protocol === "https:" && new URL(apiOrigin).protocol === "https:";
+  const hasAdminToken = () => Boolean(adminToken);
+  const clearAdminToken = () => { adminToken = ""; };
+  function setAdminToken(value) {
+    if (!canUseAdmin()) throw new Error("관리자 인증은 HTTPS 연결에서만 사용할 수 있어요.");
+    const token = typeof value === "string" ? value.trim() : "";
+    if (!token || token.length > 2048 || /[^\x21-\x7e]/.test(token)) throw new Error("관리자 토큰을 확인해 주세요.");
+    adminToken = token;
+  }
+  window.addEventListener("pagehide", clearAdminToken);
 
   const byId = (id) => document.getElementById(id);
   const isLocalAddress = (url) => url.protocol === "file:" || loopbackHosts.has(url.hostname);
@@ -17,6 +28,7 @@ const boothApi = (() => {
     else sessionStorage.removeItem(analysisExpiryKey);
   }
   function clearAnalysis() {
+    clearAdminToken();
     if (filePreview) return;
     sessionStorage.removeItem(analysisKey);
     sessionStorage.removeItem(analysisExpiryKey);
@@ -29,9 +41,15 @@ const boothApi = (() => {
     return url.href;
   }
 
-  async function api(path, { signal, timeoutMs = 15_000, ...options } = {}) {
+  async function api(path, { signal, timeoutMs = 15_000, useAdmin = false, ...options } = {}) {
     if (filePreview) throw new Error("실제 분석은 프론트 서버를 켜고 브라우저에서 열어 주세요.");
     const url = apiUrl(path);
+    const headers = new Headers(options.headers);
+    if (useAdmin && adminToken) headers.set("X-Admin-Token", adminToken);
+    const authenticated = headers.has("X-Admin-Token");
+    if (authenticated && (!canUseAdmin() || !(path === "/api/v1/try-ons" || /^\/api\/v1\/analyses\/[^/]+\/try-on-usage$/.test(path)))) {
+      throw new Error("관리자 토큰은 HTTPS의 체험 횟수 조회와 메이크업 요청에만 사용할 수 있어요.");
+    }
     const request = new AbortController();
     const abort = () => request.abort(signal.reason);
     if (signal?.aborted) throw signal.reason;
@@ -40,7 +58,7 @@ const boothApi = (() => {
     let response;
     let data;
     try {
-      response = await fetch(url, { ...options, signal: request.signal, cache: "no-store" });
+      response = await fetch(url, { ...options, headers, signal: request.signal, cache: "no-store", ...(authenticated ? { redirect: "error" } : {}) });
       data = response.status === 204 ? null : await response.json().catch((error) => {
         if (request.signal.aborted) throw error;
         return null;
@@ -64,7 +82,7 @@ const boothApi = (() => {
     const detail = response.status < 500 && typeof data?.detail === "string" ? data.detail : "";
     const error = new Error(path === "/health"
       ? "분석 서버 상태를 확인하지 못했어요. 연결을 확인하고 다시 시도해 주세요."
-      : messages[response.status] || detail || "요청을 완료할 수 없어요. 다시 시도해 주세요.");
+      : (response.status === 429 && detail) || messages[response.status] || detail || "요청을 완료할 수 없어요. 다시 시도해 주세요.");
     error.status = response.status;
     throw error;
   }
@@ -74,5 +92,5 @@ const boothApi = (() => {
     element.hidden = !message;
   }
 
-  return { byId, isLocalAddress, currentAnalysis, currentAnalysisExpiry, setAnalysis, clearAnalysis, analysisPath, apiUrl, api, showError };
+  return { byId, isLocalAddress, currentAnalysis, currentAnalysisExpiry, setAnalysis, clearAnalysis, analysisPath, apiUrl, api, showError, canUseAdmin, hasAdminToken, setAdminToken, clearAdminToken };
 })();

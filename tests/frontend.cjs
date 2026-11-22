@@ -60,7 +60,7 @@ const picture='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
   const errors=[];
   page.on('pageerror',error=>errors.push(error.message));
   let state;
-  const fresh=()=>state={result:structuredClone(fixture),deleteStatus:204,deleted:false,calls:[],failAnalysis:false,catalogFails:false,expectedLip:'#a65b70'};
+  const fresh=()=>state={result:structuredClone(fixture),deleteStatus:204,deleted:false,calls:[],failAnalysis:false,catalogFails:false,expectedLip:'#a65b70',usageCount:0};
   fresh();
   await page.route('**/health',route=>{
    state.calls.push({method:'GET',path:'/health'});
@@ -75,10 +75,12 @@ const picture='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
     return route.fulfill(state.deleteStatus===204?{status:204,body:''}:{status:state.deleteStatus,json:{detail:'삭제 오류'}});
    }
    if(url.pathname.endsWith('/image'))return route.fulfill({contentType:'image/svg+xml',body:picture});
+   if(url.pathname.endsWith('/try-on-usage'))return route.fulfill({json:{is_admin:false,limit:20,used:state.usageCount,remaining:Math.max(0,20-state.usageCount)}});
    if(url.pathname==='/api/v1/products')return route.fulfill(state.catalogFails?{status:500,json:{detail:'제품 오류'}}:{json:[oldTester,...lipCatalog,{...lipCatalog[0],id:'inactive',active:false}]});
    if(url.pathname.endsWith('/products'))return route.fulfill({json:[oldTester,lipCatalog.find(product=>product.seasons.includes(state.result.season))||lipCatalog[1]]});
    if(url.pathname.endsWith('/share'))return route.fulfill({status:201,json:{token:'test-share-token-abcdefghijk',expires_at:new Date(Date.now()+1800000).toISOString()}});
    if(url.pathname==='/api/v1/try-ons'){
+    state.usageCount++;
     assert.equal(request.postDataJSON().analysis_id,'analysis-under-test');
     assert.equal(request.postDataJSON().lip_color,state.expectedLip);
     assert.equal(request.postDataJSON().blush_color,'#d9a0bb');
@@ -156,6 +158,18 @@ const picture='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
   assert.equal(calls('POST','/try-ons').length,1);
   await page.locator('#comparison-slider').fill('75');
   assert.equal(await page.locator('#comparison-frame').evaluate(element=>element.style.getPropertyValue('--split')),'75%');
+  const comparisonHandle=page.locator('#comparison-handle');
+  await comparisonHandle.scrollIntoViewIfNeeded();
+  const comparisonBox=await page.locator('#comparison-frame').boundingBox();
+  const comparisonHandleBox=await comparisonHandle.boundingBox();
+  await page.mouse.move(comparisonHandleBox.x+comparisonHandleBox.width/2,comparisonHandleBox.y+comparisonHandleBox.height/2);
+  await page.mouse.down();
+  await page.mouse.move(comparisonBox.x+comparisonBox.width*.25,comparisonBox.y+comparisonBox.height*.5,{steps:5});
+  await page.mouse.up();
+  assert.equal(await page.locator('#comparison-slider').inputValue(),'25');
+  assert.equal(await page.locator('#comparison-frame').evaluate(element=>element.style.getPropertyValue('--split')),'25%');
+  await comparisonHandle.press('ArrowRight');
+  assert.equal(await page.locator('#comparison-slider').inputValue(),'26');
   record('가상 메이크업 별도 동의와 전후 비교');
 
   await page.locator('#result-qr-link').click();
