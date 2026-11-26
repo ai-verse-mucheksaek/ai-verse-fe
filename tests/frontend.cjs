@@ -149,6 +149,16 @@ const picture='<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450">
   record('촬영 업로드와 v2 추천·점수·근거·경고·보관 시각 표시');
 
   await page.waitForFunction(()=>document.querySelector('[name="lip_color"]')?.value==='#a65b70');
+  await page.locator('.palette-color-button').first().click();
+  assert.equal(await page.locator('.palette-target-chooser').isVisible(),true);
+  await page.locator('.palette-target-button[data-category="lip"]').click();
+  state.expectedLip='#d98ca3';
+  assert.equal(await page.locator('[name="lip_color"]').inputValue(),state.expectedLip);
+  assert.match(await page.locator('[name="lip_color"]').locator('..').textContent(),/로즈/);
+  assert.equal(await page.locator('.palette-target-chooser').isVisible(),false);
+  assert.match(await page.locator('#makeup-status').textContent(),/립에 적용/);
+  assert.equal(await page.locator('.preview-swatches [data-category="lip"]').evaluate(element=>element.style.backgroundColor),'rgb(217, 140, 163)');
+  record('추천 팔레트 색상을 립·블러셔·아이섀도 입력에 적용');
   await page.locator('#apply-makeup').click();
   assert.match(await page.locator('#makeup-error').textContent(),/동의/);
   assert.equal(calls('POST','/try-ons').length,0);
