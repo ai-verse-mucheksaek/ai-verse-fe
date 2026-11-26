@@ -69,21 +69,87 @@
     return heading;
   }
 
-  function paletteSection(colors) {
+  function paletteSection(colors, interactive = false) {
     const section = node("section");
     const palette = node("ul", "", "palette");
     palette.style.setProperty("--palette-count", Math.min(6, Math.max(1, colors.length)));
+    let selectedColor = null;
+    let selectedButton = null;
+    const chooser = interactive ? node("dialog", "", "palette-target-chooser") : null;
+    const chooserTitle = interactive ? node("strong", "선택한 색을 어디에 적용할까요?") : null;
+    const chooserColor = interactive ? node("span", "", "palette-selected-color") : null;
+    const chooserName = interactive ? node("span", "", "palette-selected-name") : null;
+    if (chooser) {
+      chooser.setAttribute("aria-label", "추천 색상 적용 부위 선택");
+      chooser.setAttribute("aria-modal", "true");
+      const card = node("div", "", "palette-target-card");
+      const heading = node("div", "", "palette-chooser-heading");
+      heading.append(chooserColor, chooserTitle, chooserName);
+      const choices = node("div", "", "palette-target-buttons");
+      const closeChooser = () => {
+        if (chooser.open && typeof chooser.close === "function") chooser.close();
+        else chooser.removeAttribute("open");
+        selectedButton?.setAttribute("aria-expanded", "false");
+      };
+      for (const category of ["lip", "blush", "eye"]) {
+        const button = node("button", labels[category], "palette-target-button");
+        button.type = "button";
+        button.dataset.category = category;
+        button.addEventListener("click", () => {
+          if (!selectedColor) return;
+          document.dispatchEvent(new CustomEvent("booth:palette-color", {
+            detail: { category, color: selectedColor.hex, name: selectedColor.name || selectedColor.hex },
+          }));
+          closeChooser();
+        });
+        choices.append(button);
+      }
+      const cancel = node("button", "닫기", "palette-target-close");
+      cancel.type = "button";
+      cancel.addEventListener("click", closeChooser);
+      choices.append(cancel);
+      card.append(heading, node("p", "추천 색상을 적용할 메이크업 부위를 골라 주세요.", "palette-chooser-help"), choices);
+      chooser.append(card);
+      chooser.addEventListener("cancel", (event) => {
+        event.preventDefault();
+        closeChooser();
+      });
+      chooser.addEventListener("click", (event) => {
+        if (event.target === chooser) closeChooser();
+      });
+    }
     for (const color of colors) {
       const item = node("li", "", "swatch-chip");
-      const swatch = node("span");
+      const chip = interactive ? node("button", "", "palette-color-button") : node("div", "", "palette-color-button palette-color-static");
+      const swatch = node("span", "", "palette-swatch");
       swatch.style.setProperty("--swatch", color.hex);
       swatch.setAttribute("aria-hidden", "true");
-      item.append(swatch);
-      if (color.name) item.append(node("strong", color.name));
-      item.append(document.createTextNode(color.hex));
+      chip.append(swatch);
+      if (color.name) chip.append(node("strong", color.name));
+      chip.append(node("small", color.hex));
+      if (interactive) {
+        chip.type = "button";
+        chip.setAttribute("aria-label", `${color.name || color.hex} 색상 적용 부위 선택`);
+        chip.setAttribute("aria-expanded", "false");
+        chip.addEventListener("click", () => {
+          selectedButton?.classList.remove("is-selected");
+          selectedButton?.setAttribute("aria-expanded", "false");
+          selectedButton = chip;
+          selectedColor = color;
+          chip.classList.add("is-selected");
+          chip.setAttribute("aria-expanded", "true");
+          chooserColor.style.setProperty("--swatch", color.hex);
+          chooserName.textContent = `${color.name || "추천 색상"} · ${color.hex}`;
+          if (typeof chooser.showModal === "function") chooser.showModal();
+          else chooser.setAttribute("open", "");
+          chooser.querySelector(".palette-target-button").focus();
+        });
+      }
+      item.append(chip);
       palette.append(item);
     }
     section.append(sectionTitle("나를 빛내는 컬러 팔레트", "Your signature shades"), palette);
+    if (chooser) section.append(chooser);
     return section;
   }
 
@@ -155,7 +221,7 @@
       section.append(sectionTitle("이렇게 추천했어요"), list);
       sections.push(section);
     }
-    sections.push(paletteSection(palette));
+    sections.push(paletteSection(palette, Boolean(actions)));
     if (actions) sections.push(actions);
 
     const style = node("section", "", "stack style-section");
@@ -319,20 +385,45 @@
       const input = node("input");
       input.type = "color";
       input.name = item.category + "_color";
+      input.dataset.category = item.category;
       input.value = item.color;
       label.append(input);
       return label;
     }));
 
+    const updateMakeupPreview = (category, color) => {
+      const preview = document.querySelector(`.preview-swatches [data-category="${category}"]`);
+      if (preview && hex(color)) preview.style.backgroundColor = color;
+    };
+    colorGroup.querySelectorAll('input[type="color"]').forEach((input) => {
+      updateMakeupPreview(input.dataset.category, input.value);
+    });
+    colorGroup.addEventListener("input", (event) => {
+      const input = event.target.closest('input[type="color"]');
+      if (input) updateMakeupPreview(input.dataset.category, input.value);
+    });
+
     const lipInput = form.querySelector('[name="lip_color"]');
     let lipTouched = false;
     let lipLoading = false;
     lipInput?.addEventListener("input", () => { lipTouched = true; });
+    document.addEventListener("booth:palette-color", (event) => {
+      const { category, color, name } = event.detail || {};
+      if (!labels[category] || !hex(color)) return;
+      const input = form.querySelector(`[name="${category}_color"]`);
+      if (!input) return;
+      input.value = color;
+      input.closest("label")?.querySelector(".color-label")?.replaceChildren(document.createTextNode(`${labels[category]} · ${name || color}`));
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      status.textContent = `${name || color} 색상을 ${labels[category]}에 적용했어요.`;
+    });
     function applyInitialLip(products) {
       const product = boothLips(products).find((item) => boothLipSpec(item).season === result.season);
       if (product && lipInput && !lipTouched) {
         lipInput.value = product.color_hex;
         lipInput.closest("label").querySelector(".color-label").textContent = "립 · " + product.name;
+        updateMakeupPreview("lip", product.color_hex);
       }
       return Boolean(product);
     }

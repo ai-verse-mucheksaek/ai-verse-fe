@@ -6,8 +6,8 @@
   <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#f9f9ff">
   <title>내 컬러 결과 | 무채색에서 살아남기</title>
-  <link rel="stylesheet" href="booth.css">
-  <script defer src="api.js"></script><script defer src="capture.js"></script><script defer src="demo.js"></script><script defer src="usage.js"></script><script defer src="booth.js"></script>
+  <link rel="stylesheet" href="booth.css?v=20261126-palette2">
+  <script defer src="api.js"></script><script defer src="capture.js"></script><script defer src="demo.js"></script><script defer src="usage.js"></script><script defer src="booth.js?v=20261126-palette2"></script>
 </head>
 <body data-page="results">
 <a class="skip-link" href="#main">본문으로 바로가기</a>
@@ -57,7 +57,7 @@
   <p class="error" id="admin-error" role="alert" hidden></p>
 </details>
 <p id="makeup-status" class="status" role="status"></p><p id="makeup-error" class="error" role="alert" hidden></p></div>
-        <div class="makeup-viewer"><div class="makeup-placeholder" id="makeup-placeholder"><div class="preview-swatches" aria-hidden="true"><span></span><span></span><span></span></div><p class="serif">A new shade of you.</p><p class="hint">색과 강도를 고른 뒤 적용해 보세요.<br>이곳에서 전후 모습을 비교할 수 있어요.</p></div><figure id="comparison" class="stack" hidden><div class="comparison-frame" id="comparison-frame"><img id="before-photo" alt="가상 메이크업 적용 전"><img id="after-photo" class="after-photo" alt="가상 메이크업 적용 후"><span class="comparison-line" aria-hidden="true"></span><button type="button" class="comparison-handle" id="comparison-handle" aria-label="전후 비교 위치 50퍼센트, 좌우로 드래그해 조절"></button><span class="comparison-tag before-tag">BEFORE</span><span class="comparison-tag after-tag">AFTER</span></div><label class="stack range-label" for="comparison-slider"><span>전후 비교 <span class="hint">사진 위 버튼을 드래그하거나 아래 막대로 조절하세요</span></span><input type="range" id="comparison-slider" min="0" max="100" value="50" aria-label="전후 사진 비교 위치"></label></figure></div>
+        <div class="makeup-viewer"><div class="makeup-placeholder" id="makeup-placeholder"><div class="preview-swatches" aria-hidden="true"><span data-category="lip"></span><span data-category="eye"></span><span data-category="blush"></span></div><p class="serif">A new shade of you.</p><p class="hint">색과 강도를 고른 뒤 적용해 보세요.<br>이곳에서 전후 모습을 비교할 수 있어요.</p></div><figure id="comparison" class="stack" hidden><div class="comparison-frame" id="comparison-frame"><img id="before-photo" alt="가상 메이크업 적용 전"><img id="after-photo" class="after-photo" alt="가상 메이크업 적용 후"><span class="comparison-line" aria-hidden="true"></span><button type="button" class="comparison-handle" id="comparison-handle" aria-label="전후 비교 위치 50퍼센트, 좌우로 드래그해 조절"></button><span class="comparison-tag before-tag">BEFORE</span><span class="comparison-tag after-tag">AFTER</span></div><label class="stack range-label" for="comparison-slider"><span>전후 비교 <span class="hint">사진 위 버튼을 드래그하거나 아래 막대로 조절하세요</span></span><input type="range" id="comparison-slider" min="0" max="100" value="50" aria-label="전후 사진 비교 위치"></label></figure></div>
       </div>
       <div class="product-section stack"><div class="section-heading"><div><p class="eyebrow">TRY IT IN REAL LIFE</p><h3>화면 속 컬러를, 내 손등에.</h3></div><span class="pill">현장 체험</span></div><p class="hint">운영자에게 추천색을 보여주고, 일회용 도구로 손등에 발색해 보세요.</p><p id="product-status" class="status" role="status"></p><ul id="product-list" class="product-list" hidden></ul></div>
     </details>
